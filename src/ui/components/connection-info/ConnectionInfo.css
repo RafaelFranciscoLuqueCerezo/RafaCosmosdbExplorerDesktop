@@ -1,0 +1,17 @@
+#connectionContainer{
+    height: 100vh;
+    width: 200px;
+    min-width: 150px;
+    display: flex;
+}
+#connectionContent{
+    padding: 0 8px 0 8px;
+    height: 100vh;
+    width: 100%;
+}
+.resizable{
+    cursor: e-resize;
+    height: 100vh;
+    width: 2px;
+    background-color: rgb(255, 0, 0);
+}
