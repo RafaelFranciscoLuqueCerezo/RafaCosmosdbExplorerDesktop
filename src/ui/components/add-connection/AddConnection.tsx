@@ -1,8 +1,8 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import React, { DetailedHTMLProps, FormEventHandler, FormHTMLAttributes, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 
-interface AddFormData {
+export interface AddFormData {
   label:string,
   endpoint:string,
   secret:string,
@@ -27,13 +27,17 @@ export default function AddConnectionPage(){
 
 
   useEffect(() => {
+    setLoading(false);
     }, []);
 
 
   return (
-    <div style={{padding:'0px 30px 8px 30px' }}>
-      <h2>Formulario creacion conexion a base de datos</h2>
-      <form style={{display:'flex', flexDirection:'column'}} onSubmit={createConnection}>
+    <div style={{width:'100vw',display:"flex", flexDirection:"column", alignItems:'center'}}>
+      <div style={{display:"flex", flexDirection:"column", width:"300px", textWrap:"wrap"}}>
+        <h2>Nueva conexion</h2>
+        <p style={{fontSize:"small"}}>Configura la conexion con la base de datos. Rellena todos los campos necesarios y pulse el boton de crear para guardar la configuracion de conexion de la base de datos</p>
+      </div>
+      <form style={{display:'flex',width:'300px', flexDirection:'column', marginTop:'20px'}} onSubmit={createConnection}>
         <TextField required name="label" label="Etiqueta" variant="outlined" onChange={(e:any)=>{formData.label=e.target.value}}/>
         <TextField sx={{marginTop:'15px'}} required name="endpoint" label="Endpoint" variant="outlined" onChange={(e:any)=>{formData.endpoint=e.target.value}}/>
         <TextField sx={{marginTop: '15px'}} required name="secret" label="Secreto" variant="outlined" onChange={(e:any)=>{formData.secret=e.target.value}}/>
