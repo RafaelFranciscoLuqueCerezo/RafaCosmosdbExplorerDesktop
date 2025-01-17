@@ -1,16 +1,34 @@
 import {app, BrowserWindow,ipcMain,Menu } from 'electron';
 import path from 'path';
-import { isDev } from './util.js';
+import { DATA_FILE, isDev, writeConnectionConfig } from './util.js';
 import { getPreloadPath } from './pathResolver.js';
+import fs from 'fs';
 
 //Menu.setApplicationMenu(null);
 
-function saveDbConfig(data:AddConnectionType){
-    console.log(data.label);
+//FUNCIONES BACK
+function saveDbConfig(connectionConfig:AddConnectionType){
+    fs.readFile(DATA_FILE,"utf-8",(err,data)=>{
+        if(err){
+            const innitalData: DataType = {
+                dbConnections:[connectionConfig]
+            } 
+            writeConnectionConfig(innitalData);
+            return;
+        }
+        let appLocalData:DataType = JSON.parse(data);
+        appLocalData.dbConnections.push(connectionConfig);
+        writeConnectionConfig(appLocalData);
+    })
+
+    
 }
 
 
 
+
+
+//LISTENERS
 app.on("ready" ,()=>{
     const mainWindow = new BrowserWindow({
         webPreferences:{
@@ -26,9 +44,6 @@ app.on("ready" ,()=>{
     
 
 })
-
-
-
 app.whenReady().then(()=>{
     ipcMain.handle("saveDbConfig",async (event:any,payload:AddConnectionType)=>{saveDbConfig(payload)})
 })
