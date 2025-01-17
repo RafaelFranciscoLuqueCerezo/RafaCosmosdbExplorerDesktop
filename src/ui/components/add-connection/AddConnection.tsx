@@ -2,18 +2,13 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@m
 import { useCallback, useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 
-export interface AddFormData {
-  label:string,
-  endpoint:string,
-  secret:string,
-  connectionType:string
-}
+
 
 export default function AddConnectionPage(){
 
   const [loading,setLoading]= useState(false);
 
-  let formData : AddFormData = {
+  let formData : AddConnectionType = {
     label:'',
     endpoint:'',
     secret:'',
@@ -23,6 +18,8 @@ export default function AddConnectionPage(){
   const createConnection = useCallback((e:any)=>{
     e.preventDefault();
     //TODO recopilar informacion y guardar configuracion conexion db , ponerla en el listado de db
+    // @ts-ignore
+    window.electron.saveDbConfig(formData);
   },[]);
 
 
