@@ -20,6 +20,7 @@ export default function AddConnectionPage(){
     //TODO recopilar informacion y guardar configuracion conexion db , ponerla en el listado de db
     // @ts-ignore
     window.electron.saveDbConfig(formData);
+    //actualizar store
   },[]);
 
 

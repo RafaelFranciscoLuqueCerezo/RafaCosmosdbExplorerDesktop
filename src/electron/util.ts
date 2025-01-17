@@ -10,7 +10,7 @@ export const DATA_FILE : string = path.join(app.getAppPath(),'/local-data.json')
 export function writeConnectionConfig(data:DataType){
     fs.writeFile(DATA_FILE,JSON.stringify(data),err=>{
         if (err){
-            console.log("error al guardar");
+            throw err;
         } else {
             console.log("ok");
         }
