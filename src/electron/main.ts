@@ -21,16 +21,17 @@ function saveDbConfig(connectionConfig:AddConnectionType){
         writeConnectionConfig(appLocalData);
     })
 }
-async function readDbConnections() : Promise<AddConnectionType[]>{
-    let connections:AddConnectionType[] = [];
-     await fs.readFile(DATA_FILE,"utf-8",(err,data)=>{
-        if(err){
-            throw err;
-        }
+
+function readDbConnections(callback:(connections:AddConnectionType[])=>any) : void{
+    try{
+        let data = fs.readFileSync(DATA_FILE,"utf-8");
         let appLocalData:DataType = JSON.parse(data);
-        connections = appLocalData.dbConnections;
-    })
-    return connections;
+        console.log(appLocalData.dbConnections);
+        callback(appLocalData.dbConnections);
+
+    } catch (err){
+        callback([]);
+    }
 }
 
 
@@ -55,7 +56,5 @@ app.on("ready" ,()=>{
 })
 app.whenReady().then(()=>{
     ipcMain.handle("saveDbConfig",async (event:any,payload:AddConnectionType)=>{saveDbConfig(payload)})
-    ipcMain.handle("readDbConnections",async (event:any)=>{readDbConnections()})
+    ipcMain.handle("readDbConnections", (event:any,callback:(connections:AddConnectionType[])=>any)=>{readDbConnections(callback)})
 })
-
-

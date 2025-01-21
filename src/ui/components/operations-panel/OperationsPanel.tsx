@@ -1,8 +1,8 @@
-import { ApplicationStore, Page, Store } from "../../store/ApplicationStore";
+import { useAppStore, Page, Store } from "../../store/ApplicationStore";
 import AddConnection from "../add-connection/AddConnection";
 
 export default function OperationsPanel(){
-  const url: Page = ApplicationStore((state:Store) => state.url);
+  const url: Page = useAppStore((state:Store) => state.url);
 
     return (
         <>

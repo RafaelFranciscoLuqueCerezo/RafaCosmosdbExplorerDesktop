@@ -18,7 +18,6 @@ export default function AddConnectionPage(){
   const createConnection = useCallback((e:any)=>{
     e.preventDefault();
     //TODO recopilar informacion y guardar configuracion conexion db , ponerla en el listado de db
-    // @ts-ignore
     window.electron.saveDbConfig(formData);
     //actualizar store
   },[]);

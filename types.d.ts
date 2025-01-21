@@ -8,3 +8,9 @@ type AddConnectionType = {
     secret:string,
     connectionType:string
 }
+interface Window {
+    electron:{
+        saveDbConfig: (data:AddConnectionType)=>void,
+        readDbConnections:(callback:(connections:AddConnectionType[])=>any)=>void
+    }
+}
