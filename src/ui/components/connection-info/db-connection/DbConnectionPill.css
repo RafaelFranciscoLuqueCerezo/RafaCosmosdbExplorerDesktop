@@ -1,0 +1,12 @@
+.dbConnectionPillContainer > .MuiListItemButton-root >  .css-cokf1l-MuiListItemIcon-root{
+    min-width: 10px;
+}
+
+.dbConnectionPillContainer .MuiCollapse-root  .css-cokf1l-MuiListItemIcon-root{
+    min-width: 20px;
+}
+
+.dbConnectionPillContainer .MuiCollapse-root .MuiListItemText-root span{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

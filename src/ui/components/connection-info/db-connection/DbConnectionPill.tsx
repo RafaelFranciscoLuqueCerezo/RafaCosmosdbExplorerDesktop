@@ -6,6 +6,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CleanHandsIcon from '@mui/icons-material/CleanHands';
 import AddIcon from '@mui/icons-material/Add';
 import React from "react";
+import './DbConnectionPill.css'
 
 type Props ={
     name:string
@@ -40,8 +41,8 @@ export default function DbConnectionPill({name}:Props){
 
     },[])
     return(
-        <>
-        <ListItemButton onContextMenu={handleContextMenu}  onClick={()=>{setOpen(!open)}}>
+        <div className="dbConnectionPillContainer">
+        <ListItemButton onContextMenu={handleContextMenu} dense disableGutters onClick={()=>{setOpen(!open)}}>
                     {open ? <ExpandLess /> : <ExpandMore />}
                     <ListItemIcon>
                     </ListItemIcon>
@@ -49,17 +50,18 @@ export default function DbConnectionPill({name}:Props){
                     </ListItemButton>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                    <ListItemButton sx={{ ml: 4 }} dense disableGutters>
+                    <ListItemButton sx={{ ml: 2 }} dense disableGutters>
                         <ListItemIcon>
-                        <FolderIcon fontSize="small" />
+                        <FolderIcon sx={{fontSize:'small'}} />
                         </ListItemIcon>
-                        <span style={{fontSize:'small'}}>Container 1</span>
+                        <ListItemText primary={"ContainerDeImportancioa1"} />
+            
                     </ListItemButton>
-                    <ListItemButton sx={{ ml: 4 }} dense disableGutters>
+                    <ListItemButton sx={{ml: 2}} dense disableGutters>
                         <ListItemIcon>
-                        <FolderIcon fontSize="small" />
+                        <FolderIcon sx={{fontSize:'small'}} />
                         </ListItemIcon>
-                        <span style={{fontSize:'small'}}>Container 1</span>
+                        <ListItemText primary={"Container2"} />
                     </ListItemButton>
                     
                     </List>
@@ -93,7 +95,7 @@ export default function DbConnectionPill({name}:Props){
                     <Typography variant="inherit">Crear borrado programado</Typography>
                     </MenuItem>
                 </Menu>
-        </>
+        </div>
     )
 
 }
