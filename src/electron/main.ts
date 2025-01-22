@@ -22,17 +22,17 @@ function saveDbConfig(connectionConfig:AddConnectionType){
     })
 }
 
-function readDbConnections(callback:(connections:AddConnectionType[])=>any) : void{
+function readDbConnections() : AddConnectionType[]{
     try{
         let data = fs.readFileSync(DATA_FILE,"utf-8");
         let appLocalData:DataType = JSON.parse(data);
-        console.log(appLocalData.dbConnections);
-        callback(appLocalData.dbConnections);
+        return appLocalData.dbConnections;
 
     } catch (err){
-        callback([]);
+        return [];
     }
 }
+
 
 
 
@@ -56,5 +56,5 @@ app.on("ready" ,()=>{
 })
 app.whenReady().then(()=>{
     ipcMain.handle("saveDbConfig",async (event:any,payload:AddConnectionType)=>{saveDbConfig(payload)})
-    ipcMain.handle("readDbConnections", (event:any,callback:(connections:AddConnectionType[])=>any)=>{readDbConnections(callback)})
+    ipcMain.handle("readDbConnections", ()=>readDbConnections())
 })

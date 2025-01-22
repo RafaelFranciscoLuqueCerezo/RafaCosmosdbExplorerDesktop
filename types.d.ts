@@ -11,6 +11,6 @@ type AddConnectionType = {
 interface Window {
     electron:{
         saveDbConfig: (data:AddConnectionType)=>void,
-        readDbConnections:(callback:(connections:AddConnectionType[])=>any)=>void
+        readDbConnections:()=>Promise<AddConnectionType[]>
     }
 }

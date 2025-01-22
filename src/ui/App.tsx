@@ -11,10 +11,8 @@ function App() {
   useEffect(()=>{
 
     const asyncFunction = async () => {
-      await window.electron.readDbConnections((response)=>{
-        initConnections(response);
-      });
-    };
+      window.electron.readDbConnections().then((result)=>initConnections(result));
+    }
 
     asyncFunction();
 
