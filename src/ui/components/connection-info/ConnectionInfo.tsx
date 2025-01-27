@@ -46,7 +46,7 @@ export default function ConnectionInfo(){
                 <Divider />
                 <List>
                     {
-                       connections !=undefined && connections!=null && connections.map((element)=><DbConnectionPill name={element.label}/>)
+                       connections !=undefined && connections!=null && connections.map((element)=><DbConnectionPill config={element}/>)
                     }    
                 </List>    
                 

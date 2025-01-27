@@ -5,15 +5,14 @@
     display: flex;
 }
 #connectionContent{
-    padding: 0 8px 0 8px;
+    padding: 0 0px 0 8px;
     height: 100vh;
     width: 100%;
 }
 .resizable{
-    z-index: 999;
     cursor: e-resize;
     height: 100vh;
-    width: 2px;
-    padding-left: 1px;
+    width: 1px;
+    padding-left: 2px;
     background-color: rgb(236, 236, 236);
 }

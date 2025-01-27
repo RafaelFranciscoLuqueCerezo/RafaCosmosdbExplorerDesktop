@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Collapse, Divider, List, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -9,10 +9,11 @@ import React from "react";
 import './DbConnectionPill.css'
 
 type Props ={
-    name:string
+    config:AddConnectionType
 }
-export default function DbConnectionPill({name}:Props){
+export default function DbConnectionPill({config}:Props){
     const [open,setOpen] = useState(false);
+    const [containers,setContainers] = useState<string[]>([]);
     const [contextMenu, setContextMenu] = React.useState<{
         mouseX: number;
         mouseY: number;
@@ -34,35 +35,38 @@ export default function DbConnectionPill({name}:Props){
       },[])
 
     const handleClose = useCallback(() => {
-    setContextMenu(null);
+        setContextMenu(null);
     },[]);
 
     useEffect(()=>{
+        //Llamar a electron para obtener los containers, solo llamarlo una vez
+        console.log(`HOLITA DESDE ${config.dbName}`);
+        const asyncFunction = async () => {
+            await window.electron.connect(config);
+            const value = await window.electron.getContainers(config.label);
+            console.log(value);
+          }
+        asyncFunction();
 
     },[])
     return(
-        <div className="dbConnectionPillContainer">
+        <div className="dbConnectionPillContainer" style={{overflowY: 'auto'}}>
         <ListItemButton onContextMenu={handleContextMenu} dense disableGutters onClick={()=>{setOpen(!open)}}>
                     {open ? <ExpandLess /> : <ExpandMore />}
                     <ListItemIcon>
                     </ListItemIcon>
-                    <ListItemText primary={name} />
+                    <ListItemText primary={config.label} />
                     </ListItemButton>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                    <ListItemButton sx={{ ml: 2 }} dense disableGutters>
-                        <ListItemIcon>
-                        <FolderIcon sx={{fontSize:'small'}} />
-                        </ListItemIcon>
-                        <ListItemText primary={"ContainerDeImportancioa1"} />
-            
-                    </ListItemButton>
-                    <ListItemButton sx={{ml: 2}} dense disableGutters>
-                        <ListItemIcon>
-                        <FolderIcon sx={{fontSize:'small'}} />
-                        </ListItemIcon>
-                        <ListItemText primary={"Container2"} />
-                    </ListItemButton>
+                        {containers.map((container:string)=>
+                            <ListItemButton sx={{ ml: 2 }} dense disableGutters>
+                            <ListItemIcon>
+                            <FolderIcon sx={{fontSize:'small'}} />
+                            </ListItemIcon>
+                            <ListItemText primary={container} />
+                            </ListItemButton>
+                        )}
                     
                     </List>
                 </Collapse>
