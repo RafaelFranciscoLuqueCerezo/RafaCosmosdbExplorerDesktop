@@ -7,6 +7,7 @@ import CleanHandsIcon from '@mui/icons-material/CleanHands';
 import AddIcon from '@mui/icons-material/Add';
 import React from "react";
 import './DbConnectionPill.css'
+import { DbContainerPill } from "../db-container/DbContainerPill";
 
 type Props ={
     config:AddConnectionType
@@ -42,9 +43,9 @@ export default function DbConnectionPill({config}:Props){
         //Llamar a electron para obtener los containers, solo llamarlo una vez
         console.log(`HOLITA DESDE ${config.dbName}`);
         const asyncFunction = async () => {
-            await window.electron.connect(config);
-            const value = await window.electron.getContainers(config.label);
-            console.log(value);
+            window.electron.connect(config)
+            .then((_)=>window.electron.getContainers(config.label))
+            .then((_)=>window.electron.subscribeContainers((cnt:string[])=>setContainers(cnt)))
           }
         asyncFunction();
 
@@ -59,15 +60,7 @@ export default function DbConnectionPill({config}:Props){
                     </ListItemButton>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {containers.map((container:string)=>
-                            <ListItemButton sx={{ ml: 2 }} dense disableGutters>
-                            <ListItemIcon>
-                            <FolderIcon sx={{fontSize:'small'}} />
-                            </ListItemIcon>
-                            <ListItemText primary={container} />
-                            </ListItemButton>
-                        )}
-                    
+                        {containers.map((container:string)=><DbContainerPill dbLabel={config.label} container={container}/>)}
                     </List>
                 </Collapse>
                 <Menu

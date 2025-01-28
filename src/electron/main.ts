@@ -33,22 +33,21 @@ function connect(config:AddConnectionType){
     cosmosdbClients.push({label:config.label,dbName:config.dbName,client})
 }
 
-async function getContainers(label:string):Promise<string[]>{
-    console.log('leyendo contenedores');
+async function getContainers(label:string):Promise<void>{
     const element = cosmosdbClients.find((client:Client)=>client.label===label);
     if(element === undefined){
-        return[]
+        mainWindow.webContents.send('containers',[]);
+        return;
     }
-    console.log('existe el cliente');
+
     try{
         const client : CosmosClient = element.client as CosmosClient;
         const response = await client.database(element.dbName).containers.readAll().fetchAll();
         console.log('devuelve resultasdod');
-        return response.resources.map((x)=>x.id);
+        mainWindow.webContents.send('containers',response.resources.map((x)=>x.id));
         
     } catch (error:any){
-        console.error('error al leer contenedores')
-        return [];
+        mainWindow.webContents.send('containers',[]);
     }
    
 
@@ -97,10 +96,10 @@ function readDbConnections() : AddConnectionType[]{
 
 
 
-
+let mainWindow:BrowserWindow;
 //LISTENERS
 app.on("ready" ,()=>{
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         webPreferences:{
             preload:getPreloadPath(),
         }

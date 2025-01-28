@@ -16,11 +16,17 @@ type Client = {
     client:any
 }
 
+type Operation = {
+    dbLabel:string,
+    container:string
+}
+
 interface Window {
     electron:{
         saveDbConfig: (data:AddConnectionType)=>Promise<void>,
         readDbConnections:()=>Promise<AddConnectionType[]>,
         getContainers:(data:string)=>Promise<string[]>,
-        connect:(data:AddConnectionType)=>Promise<void>
+        connect:(data:AddConnectionType)=>Promise<void>,
+        subscribeContainers:(callback:(containers:string[])=>void)=>void
     }
 }

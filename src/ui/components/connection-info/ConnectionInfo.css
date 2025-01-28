@@ -3,11 +3,29 @@
     width: 200px;
     min-width: 150px;
     display: flex;
+
 }
+
+#connectionContent::-webkit-scrollbar {
+    position: relative;
+    width: 3px;
+}
+
+#connectionContent::-webkit-scrollbar-track {
+    background:  #fcfcfc;
+    border-radius: 30px;
+}
+
+#connectionContent::-webkit-scrollbar-thumb {
+    background: #3cb190;
+    border-radius: 30px;
+}
+
 #connectionContent{
     padding: 0 0px 0 8px;
     height: 100vh;
     width: 100%;
+    overflow-y: auto;
 }
 .resizable{
     cursor: e-resize;
