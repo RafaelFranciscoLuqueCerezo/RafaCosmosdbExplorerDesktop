@@ -15,10 +15,10 @@ export const DbContainerPill=({container,dbLabel}:Props)=>{
         mouseX: number;
         mouseY: number;
       } | null>(null);
-      const [open,setOpen] = useState(false);
-      const addOperation = useAppStore((state)=>state.addOperation);
+    const [open,setOpen] = useState(false);
+    const addOperation = useAppStore((state)=>state.addOperation);
 
-      const handleContextMenu = useCallback((event: React.MouseEvent) => {
+    const handleContextMenu = useCallback((event: React.MouseEvent) => {
         event.preventDefault();
         setContextMenu(
           contextMenu === null
@@ -56,11 +56,11 @@ export const DbContainerPill=({container,dbLabel}:Props)=>{
         }
         >
         <MenuItem onClick={(_)=>{
-            console.log({dbLabel,container});
             addOperation({
                 dbLabel,
                 container
             })
+            handleClose();
         }}>
         <ListItemIcon>
             <QueryStatsIcon/>
