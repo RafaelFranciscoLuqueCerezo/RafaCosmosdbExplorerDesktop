@@ -1,3 +1,15 @@
 .container-op-active{
     background-color: #d3ffd3 !important;
 }
+.container-operation-opts {
+    .css-93wjf5-MuiButtonBase-root-MuiTab-root {
+        min-width: 10px !important;
+        border-bottom:1px solid rgb(241, 241, 241);
+        &:nth-child(1) {
+            border-left: 1px solid rgb(241, 241, 241);
+        }
+        &:nth-child(3) {
+            border-right: 1px solid rgb(241, 241, 241);
+        }
+    }
+}

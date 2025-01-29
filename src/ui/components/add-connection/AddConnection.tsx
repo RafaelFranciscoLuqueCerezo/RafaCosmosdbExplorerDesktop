@@ -64,7 +64,7 @@ export default function AddConnectionPage({connections}:Props){
 
 
   return (
-    <div className="addConectionContainer" style={{width:'100vw',display:"flex", flexDirection:"column", alignItems:'center'}}>
+    <div className="addConectionContainer" style={{display:"flex", flexDirection:"column", alignItems:'center'}}>
       <div style={{display:"flex", flexDirection:"column", width:"300px", textWrap:"wrap"}}>
         <h2>Nueva conexion</h2>
         <p style={{fontSize:"small"}}>Configura la conexion con la base de datos. Rellena todos los campos necesarios y pulse el boton de crear para guardar la configuracion de conexion de la base de datos</p>
