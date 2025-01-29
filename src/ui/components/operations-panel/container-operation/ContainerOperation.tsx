@@ -26,9 +26,9 @@ export const ContainerOperation = ({operation}:Props)=>{
     };
 
     return(
-        <div className="container-operation-opts" style={{marginRight:'10px'}}>
+        <div className="container-operation-opts" style={{marginRight:'5px'}}>
             <div style={{cursor:'pointer'}} onClick={(_)=>changeActiveOperation(operation)}>
-                <div  className={`${isActive && 'container-op-active'}`}style={{padding:'2px',backgroundColor: '#f9f9f9', display:"flex",justifyContent:'space-between'}}>
+                <div  className={`${isActive && 'container-op-active'}`}style={{padding:'2px',backgroundColor: '#f9f9f9', display:"flex",justifyContent:'space-between',minWidth:'154px',whiteSpace:'nowrap',overflow:'hidden'}}>
                         <div><strong style={{fontSize:'xx-small'}}>{operation.dbLabel}</strong><span style={{fontSize:'x-small'}}>-{operation.container}</span></div>
                         <IconButton aria-label="delete" size="small">
                             <CloseIcon fontSize="inherit"/>
