@@ -18,7 +18,8 @@ type Client = {
 
 type Operation = {
     dbLabel:string,
-    container:string
+    container:string,
+    type: 'SQL'|'DELETE'|'IMPORT'|'NONE',
 }
 
 interface Window {

@@ -20,7 +20,7 @@ export enum Page {
 export const useAppStore = create<Store>((set) => ({
     url: Page.BLANK,
     operations:[],
-    activeOperation:{dbLabel:'',container:''},
+    activeOperation:{dbLabel:'',container:'',type:'NONE'},
     //llamar y recuperar del fichero
     connections: [],
     navigateTo: (url:Page) => set(()=>({url})),
@@ -37,7 +37,7 @@ export const useAppStore = create<Store>((set) => ({
     ),
     removeOperation: (op:Operation)=>set((state)=>{
         const arrayAfterRemove = state.operations.filter((value)=>value.container!=op.container&&value.dbLabel!=op.dbLabel);
-        const newActiveOperation:Operation = arrayAfterRemove.length == 0 ? {dbLabel:'',container:''} : arrayAfterRemove[0] ;
+        const newActiveOperation:Operation = arrayAfterRemove.length == 0 ? {dbLabel:'',container:'',type:'NONE'} : arrayAfterRemove[0] ;
         return {operations:arrayAfterRemove,url:Page.OPERATION,activeOperation:newActiveOperation}
     }),
     addConnection: (connection:AddConnectionType) => set((state)=>({connections:[...state.connections,connection]})),
