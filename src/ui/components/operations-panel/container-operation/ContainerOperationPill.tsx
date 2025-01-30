@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './ContainerOperationPill.css';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -10,12 +10,11 @@ import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 
 type Props = {
-    operation:Operation,
-    changeOperation:(operation:Operation)=>void
+    operation:Operation
 }
 const tabOperationArray: ('SQL'|'DELETE'|'IMPORT'|'NONE') []  = ['SQL','IMPORT','DELETE'];
 
-export const ContainerOperationPill = ({operation,changeOperation}:Props)=>{
+export const ContainerOperationPill = ({operation}:Props)=>{
 
     const [value, setValue] = useState(0);
     const activeOperation = useAppStore((state)=>state.activeOperation);
@@ -30,8 +29,7 @@ export const ContainerOperationPill = ({operation,changeOperation}:Props)=>{
     return(
         <div className="container-operation-opts" style={{marginRight:'5px'}}>
             <div style={{cursor:'pointer'}} onClick={(_)=>{
-                changeActiveOperation(operation);
-                changeOperation({...operation,type:tabOperationArray[value]});
+                changeActiveOperation({...operation,type:tabOperationArray[value]});
             }}>
                 <div  className={`${isActive && 'container-op-active'}`}style={{padding:'2px',backgroundColor: '#f9f9f9', display:"flex",justifyContent:'space-between',minWidth:'154px',whiteSpace:'nowrap',overflow:'hidden'}}>
                         <div><strong style={{fontSize:'xx-small'}}>{operation.dbLabel}</strong><span style={{fontSize:'x-small'}}>-{operation.container}</span></div>
@@ -42,9 +40,9 @@ export const ContainerOperationPill = ({operation,changeOperation}:Props)=>{
             </div>
             {isActive && 
             <Tabs  value={value} onChange={handleChange} aria-label="icon tabs example">
-                <Tab onClick={(_)=>changeOperation({...operation,type:'SQL'})}  icon={<AnalyticsIcon fontSize="small"/>} aria-label="sql" />
-                <Tab onClick={(_)=>changeOperation({...operation,type:'IMPORT'})} icon={<AttachFileIcon fontSize="small"/>} aria-label="import" />
-                <Tab onClick={(_)=>changeOperation({...operation,type:'DELETE'})} icon={<AutoDeleteIcon fontSize="small"/>} aria-label="delete" />
+                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'SQL'})}  icon={<AnalyticsIcon fontSize="small"/>} aria-label="sql" />
+                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'IMPORT'})} icon={<AttachFileIcon fontSize="small"/>} aria-label="import" />
+                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'DELETE'})} icon={<AutoDeleteIcon fontSize="small"/>} aria-label="delete" />
             </Tabs>
             }
         </div>

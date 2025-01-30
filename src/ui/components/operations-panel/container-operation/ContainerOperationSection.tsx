@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { ContainerOperationPill } from "./ContainerOperationPill";
 import { SqlSection } from "./sections/SqlSection";
+import { useAppStore } from "../../../store/ApplicationStore";
 
 type Props = {
     operations:Operation[]
@@ -11,7 +12,7 @@ export const  ContainerOperationSection = ({operations}:Props)=>{
     const [isDown, setIsDown] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
-    const [operation,setOperation] = useState<Operation>({dbLabel:'',container:'',type:'SQL'})
+    const activeOperation = useAppStore((state)=>state.activeOperation);
   
     const handleMouseDown = (e:any) => {
       setIsDown(true);
@@ -54,12 +55,12 @@ export const  ContainerOperationSection = ({operations}:Props)=>{
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
       >
-        {operations.map((op:Operation)=><ContainerOperationPill changeOperation={(operation:Operation)=>setOperation(operation)} operation={op}/>)}
+        {operations.map((op:Operation)=><ContainerOperationPill operation={op}/>)}
       </div>
-      <div style={{height:'92vh',backgroundColor:'yellow'}}>
-        {operation.type==='SQL' && <SqlSection operation={operation}/>}
-        {operation.type==='DELETE' && <div>delete</div>}
-        {operation.type==='IMPORT' && <div>import</div>}
+      <div style={{height:'92vh'}}>
+        {activeOperation.type==='SQL' && <SqlSection operation={activeOperation}/>}
+        {activeOperation.type==='DELETE' && <div>delete</div>}
+        {activeOperation.type==='IMPORT' && <div>import</div>}
       </div>
       </div>
     )

@@ -24,16 +24,28 @@ export const SqlSection = ({operation}:Props)=>{
         <Grid container direction="column" sx={{
             justifyContent: "flex-start",
             alignItems: "stretch",
-            backgroundColor:"red",
             height:'100%'
           }}>
-            <Grid sx={{height:'40%',backgroundColor:'blue'}}>
-                <textarea className='editor-sql' value={sql} 
+            <Grid sx={{height:'40%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
+                <textarea spellCheck='false' className='editor-sql' value={sql} 
                 onChange={
                     (event)=>{
                         CntOpMap.addSql(operation,event.target.value)
                         setSql(event.target.value);
-                    }}>
+                    }}
+                onKeyDown={(event)=>{
+                    if(event.key=='Tab' ){
+                        event.preventDefault();
+                        const textArea = event.currentTarget;
+                        textArea.setRangeText(
+                        "\t",
+                        textArea.selectionStart,
+                        textArea.selectionEnd,
+                        "end"
+                        );
+                    }
+                }}
+                    >
                 
                 </textarea>
             </Grid>

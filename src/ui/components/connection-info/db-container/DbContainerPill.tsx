@@ -58,7 +58,8 @@ export const DbContainerPill=({container,dbLabel}:Props)=>{
         <MenuItem onClick={(_)=>{
             addOperation({
                 dbLabel,
-                container
+                container,
+                type:'SQL'
             })
             handleClose();
         }}>
