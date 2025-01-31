@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import './SqlSection.css';
 import Grid from '@mui/material/Grid2';
 import { CntOpMap } from '../../../../CntOpMap';
+import { Box } from '@mui/material';
 
 type Props = {
     operation:Operation
@@ -49,8 +50,65 @@ export const SqlSection = ({operation}:Props)=>{
                 
                 </textarea>
             </Grid>
-            <Grid sx={{height:'60%',backgroundColor:'gray'}}>
-                {result}
+            <Grid sx={{height:'60%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
+                <div className='result-sql'>
+                    <div>Counter</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                    <div>Result:{result}</div>
+                </div>
+                
             </Grid>
         </Grid>
     )

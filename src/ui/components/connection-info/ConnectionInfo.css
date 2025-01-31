@@ -33,7 +33,9 @@
     height: 100vh;
     width: 1px;
     padding-left: 2px;
-    &:hover{
+    .active{
+        background-color: rgb(1, 224, 224);;
+    }    &:hover{
         background-color: rgb(1, 224, 224);
     }
 }

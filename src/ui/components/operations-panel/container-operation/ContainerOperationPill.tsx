@@ -40,9 +40,9 @@ export const ContainerOperationPill = ({operation}:Props)=>{
             </div>
             {isActive && 
             <Tabs  value={value} onChange={handleChange} aria-label="icon tabs example">
-                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'SQL'})}  icon={<AnalyticsIcon fontSize="small"/>} aria-label="sql" />
-                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'IMPORT'})} icon={<AttachFileIcon fontSize="small"/>} aria-label="import" />
-                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'DELETE'})} icon={<AutoDeleteIcon fontSize="small"/>} aria-label="delete" />
+                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'SQL'})}  icon={<AnalyticsIcon fontSize="inherit"/>} aria-label="sql" />
+                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'IMPORT'})} icon={<AttachFileIcon fontSize="inherit"/>} aria-label="import" />
+                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'DELETE'})} icon={<AutoDeleteIcon fontSize="inherit"/>} aria-label="delete" />
             </Tabs>
             }
         </div>

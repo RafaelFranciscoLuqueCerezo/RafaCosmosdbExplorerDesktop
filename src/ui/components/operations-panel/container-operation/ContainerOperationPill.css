@@ -1,15 +1,27 @@
 .container-op-active{
-    background-color: #d3ffd3 !important;
+    background-color: #ffffff !important;
+    border: 1px solid rgb(247, 247, 247);
 }
 .container-operation-opts {
+    .css-jhczcq-MuiTabs-root{
+        min-height: 30px !important;
+    }
     .css-93wjf5-MuiButtonBase-root-MuiTab-root {
-        min-width: 10px !important;
+        min-width: 5px !important;
+        min-height: 30px !important;
+        padding: 2px 10px;
         border-bottom:1px solid rgb(241, 241, 241);
         &:nth-child(1) {
             border-left: 1px solid rgb(241, 241, 241);
+            border-bottom-left-radius: 3px;
         }
         &:nth-child(3) {
             border-right: 1px solid rgb(241, 241, 241);
+            border-bottom-right-radius: 3px;
         }
+    }
+    .css-1qltlow-MuiTabs-indicator {
+        bottom: none !important;
+
     }
 }
