@@ -47,7 +47,7 @@ export const  ContainerOperationSection = ({operations}:Props)=>{
     };
     
     return (
-      <div style={{display:'flex',flexDirection:'column',paddingLeft:'10px'}}>
+      <div style={{display:'flex',flexDirection:'column',paddingLeft:'10px', overflow:"hidden"}}>
       <div style={{height:'8vh', display:'flex',overflowX:'hidden',whiteSpace:'noWrap',cursor:'grap',userSelect:'none'}}
       ref={scrollRef}
       onMouseDown={handleMouseDown}

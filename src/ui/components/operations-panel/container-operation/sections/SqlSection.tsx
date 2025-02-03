@@ -27,7 +27,7 @@ export const SqlSection = ({operation}:Props)=>{
             alignItems: "stretch",
             height:'100%'
           }}>
-            <Grid sx={{height:'40%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
+            <Grid sx={{height:'30%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
                 <textarea spellCheck='false' className='editor-sql' value={sql} 
                 onChange={
                     (event)=>{
@@ -50,9 +50,8 @@ export const SqlSection = ({operation}:Props)=>{
                 
                 </textarea>
             </Grid>
-            <Grid sx={{height:'60%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
+            <Grid sx={{height:'67.5%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
                 <div className='result-sql'>
-                    <div>Counter</div>
                     <div>Result:{result}</div>
                     <div>Result:{result}</div>
                     <div>Result:{result}</div>
@@ -108,6 +107,7 @@ export const SqlSection = ({operation}:Props)=>{
                     <div>Result:{result}</div>
                     <div>Result:{result}</div>
                 </div>
+                <input className='search' type='search'/>
                 
             </Grid>
         </Grid>
