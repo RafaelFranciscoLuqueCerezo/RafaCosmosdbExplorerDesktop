@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import './SqlSection.css';
 import Grid from '@mui/material/Grid2';
 import { CntOpMap } from '../../../../CntOpMap';
-import { Box } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 type Props = {
     operation:Operation
@@ -52,6 +52,10 @@ export const SqlSection = ({operation}:Props)=>{
             </Grid>
             <Grid sx={{height:'67.5%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
                 <div className='result-sql'>
+                    <div className='search'>
+                    <SearchIcon style={{position:'absolute',top:'0',left:'10px'}}/>
+                    <input type='search' placeholder='buscar...'/>
+                    </div>
                     <div>Result:{result}</div>
                     <div>Result:{result}</div>
                     <div>Result:{result}</div>
@@ -107,7 +111,7 @@ export const SqlSection = ({operation}:Props)=>{
                     <div>Result:{result}</div>
                     <div>Result:{result}</div>
                 </div>
-                <input className='search' type='search'/>
+                
                 
             </Grid>
         </Grid>

@@ -66,8 +66,23 @@
 
 }
 .search{
-    background-color: red;
-    height: 20px;
-    float: right;
-    position: sticky;
+    border: 1px solid gray;
+    height: 25px;
+    width: 250px;
+    right: 15px;
+    position: fixed;
+    border-radius: 5px;
+    input{
+        padding-left: 35px;
+        
+        width: 245px;
+        background-color: transparent;
+        border: none;
+        &::-webkit-search-cancel-button{
+            display: none;
+        }
+        &:focus{
+            outline: none !important;
+        }
+    }
 }
