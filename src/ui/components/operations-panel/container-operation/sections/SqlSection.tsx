@@ -4,6 +4,7 @@ import './SqlSection.css';
 import Grid from '@mui/material/Grid2';
 import { CntOpMap } from '../../../../CntOpMap';
 import SearchIcon from '@mui/icons-material/Search';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 type Props = {
     operation:Operation
@@ -27,7 +28,7 @@ export const SqlSection = ({operation}:Props)=>{
             alignItems: "stretch",
             height:'100%'
           }}>
-            <Grid sx={{height:'30%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
+            <Grid sx={{height:'30%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0',position:'relative'}}>
                 <textarea spellCheck='false' className='editor-sql' value={sql} 
                 onChange={
                     (event)=>{
@@ -49,6 +50,7 @@ export const SqlSection = ({operation}:Props)=>{
                     >
                 
                 </textarea>
+                <PlayArrowIcon style={{position:'absolute',right:'15px',top:'10px'}}/>
             </Grid>
             <Grid sx={{height:'67.5%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0'}}>
                 <div className='result-sql'>
