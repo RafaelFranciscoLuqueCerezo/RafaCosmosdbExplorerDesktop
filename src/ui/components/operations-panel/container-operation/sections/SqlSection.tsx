@@ -10,6 +10,7 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import IconButton from '@mui/material/IconButton';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import JsonView from '@uiw/react-json-view';
 
 type Props = {
     operation:Operation
@@ -17,7 +18,7 @@ type Props = {
 export const SqlSection = ({operation}:Props)=>{
 
     const [sql,setSql] = useState("");
-    const [result,setResult] = useState("");
+    const [result,setResult] = useState<any[]>([]);
     const [count,setCount] = useState(0);
     const textAreaRef = useRef<any>(null);
     const playQuery = useCallback(()=>{
@@ -28,7 +29,7 @@ export const SqlSection = ({operation}:Props)=>{
         const sqlQuery = textAreaRef.current.value.substring(textAreaRef.current.selectionStart, textAreaRef.current.selectionEnd);
         window.electron.launchQuery({op:operation,sentence:sqlQuery});
     
-    },[])
+    },[operation])
 
     useEffect(()=>{
         //TODO recuperar del mapa global tanto el resultado como el text area
@@ -38,9 +39,8 @@ export const SqlSection = ({operation}:Props)=>{
 
         const asyncFunction = async () => {
             window.electron.subscribeQueryResult((result:any[])=>{
-                const resultString : string = JSON.stringify(result);
-                CntOpMap.addResult(operation,resultString);
-                setResult(resultString);
+                CntOpMap.addResult(operation,result);
+                setResult(result);
             });
             window.electron.subscribeQueryCount((result:number)=>{
                 setCount(result);
@@ -96,7 +96,7 @@ export const SqlSection = ({operation}:Props)=>{
                     </IconButton>
                     <input type='search' placeholder='buscar...'/>
                     </div>
-                    <div>Result:{result}</div>
+                    <JsonView value={result} />
                 </div>
                 
                 
