@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { ContainerOperationPill } from "./ContainerOperationPill";
 import { SqlSection } from "./sections/SqlSection";
 import { useAppStore } from "../../../store/ApplicationStore";
+import { ImportSection } from "./sections/ImportSection";
 
 type Props = {
     operations:Operation[]
@@ -48,7 +49,7 @@ export const  ContainerOperationSection = ({operations}:Props)=>{
     
     return (
       <div style={{display:'flex',flexDirection:'column',paddingLeft:'10px', overflow:"hidden"}}>
-      <div style={{height:'8vh', display:'flex',overflowX:'hidden',whiteSpace:'noWrap',cursor:'grap',userSelect:'none'}}
+      <div style={{height:'7vh', display:'flex',overflowX:'hidden',whiteSpace:'noWrap',cursor:'grap',userSelect:'none',minHeight:'70px',}}
       ref={scrollRef}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
@@ -57,10 +58,9 @@ export const  ContainerOperationSection = ({operations}:Props)=>{
       >
         {operations.map((op:Operation)=><ContainerOperationPill operation={op}/>)}
       </div>
-      <div style={{height:'92vh'}}>
+      <div style={{height:'93vh'}}>
         {activeOperation.type==='SQL' && <SqlSection operation={activeOperation}/>}
-        {activeOperation.type==='DELETE' && <div>delete</div>}
-        {activeOperation.type==='IMPORT' && <div>import</div>}
+        {activeOperation.type==='IMPORT' && <ImportSection operation={activeOperation}/>}
       </div>
       </div>
     )

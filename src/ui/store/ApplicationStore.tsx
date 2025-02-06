@@ -11,6 +11,7 @@ export interface Store {
     addOperation:(operation:Operation)=>void,
     initConnections:(connections:AddConnectionType[])=>void,
     removeConnection:(position:number)=>void,
+    removeOperation:(operation:Operation)=>void,
 }
 export enum Page {
     ADD_CONNECTION = 'ADD_CONNECTION',
@@ -36,9 +37,9 @@ export const useAppStore = create<Store>((set) => ({
     }
     ),
     removeOperation: (op:Operation)=>set((state)=>{
-        const arrayAfterRemove = state.operations.filter((value)=>value.container!=op.container&&value.dbLabel!=op.dbLabel);
+        const arrayAfterRemove = state.operations.filter((value)=>!(value.container==op.container&&value.dbLabel==op.dbLabel));
         const newActiveOperation:Operation = arrayAfterRemove.length == 0 ? {dbLabel:'',container:'',type:'NONE'} : arrayAfterRemove[0] ;
-        return {operations:arrayAfterRemove,url:Page.OPERATION,activeOperation:newActiveOperation}
+        return {url:Page.OPERATION,activeOperation:newActiveOperation,operations:arrayAfterRemove}
     }),
     addConnection: (connection:AddConnectionType) => set((state)=>({connections:[...state.connections,connection]})),
     initConnections: (connections:AddConnectionType[]) => set(()=>({connections})),

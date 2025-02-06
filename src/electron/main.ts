@@ -1,5 +1,5 @@
 import {app, BrowserWindow,ipcMain,Menu } from 'electron';
-import { ConnectionMode, CosmosClient } from "@azure/cosmos";
+import { ConnectionMode, CosmosClient, FeedResponse } from "@azure/cosmos";
 import https from 'https';
 import path from 'path';
 import { CERT_FOLDER, DATA_FILE, isDev } from './util.js';
@@ -51,6 +51,28 @@ async function getContainers(label:string):Promise<void>{
     }
    
 
+}
+
+async function launchQuery(op:Operation,sentence:string):Promise<void>{
+    const savedConnection : Client|undefined = cosmosdbClients.find((x:Client)=>x.label == op.dbLabel);
+    if(savedConnection == undefined){
+        return;
+    }
+    const client : CosmosClient = savedConnection.client as CosmosClient;
+    //launch query para el resultado
+    client.database(savedConnection.dbName)
+    .container(op.container)
+    .items
+    .query(sentence,undefined)
+    .fetchAll()
+    .then((result:FeedResponse<any>)=>{
+        console.log(result.resources);
+        mainWindow.webContents.send('sql-result',result.resources);
+        mainWindow.webContents.send('sql-count',result.resources.length);
+    })
+    //launch query para el conteo
+
+    
 }
 
 
@@ -118,4 +140,5 @@ app.whenReady().then(()=>{
     ipcMain.handle("readDbConnections", ()=>readDbConnections())
     ipcMain.handle("connect",(event:any,payload:AddConnectionType)=>{connect(payload)})
     ipcMain.handle("getContainers",(event:any,payload:string)=>{getContainers(payload)})
+    ipcMain.handle("launchQuery",(event:any,payload:QueryRequest)=>{launchQuery(payload.op,payload.sentence)})
 })

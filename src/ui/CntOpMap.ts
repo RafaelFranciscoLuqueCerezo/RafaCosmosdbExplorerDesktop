@@ -15,7 +15,7 @@ export class CntOpMap {
         if(this.map.has(this.getId(id))){
             return;
         }
-        this.map.set(this.getId(id),{sql:'',result:'',import:''});
+        this.map.set(this.getId(id),{sql:'SELECT * FROM c',result:'',import:''});
     }
     static getSql(id:Operation):string{
         const retrieved = this.map.get(this.getId(id));

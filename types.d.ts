@@ -19,7 +19,13 @@ type Client = {
 type Operation = {
     dbLabel:string,
     container:string,
-    type: 'SQL'|'DELETE'|'IMPORT'|'NONE',
+    type: 'SQL'|'IMPORT'|'NONE',
+}
+
+
+type QueryRequest = {
+    op:Operation,
+    sentence:string
 }
 
 interface Window {
@@ -27,7 +33,10 @@ interface Window {
         saveDbConfig: (data:AddConnectionType)=>Promise<void>,
         readDbConnections:()=>Promise<AddConnectionType[]>,
         getContainers:(data:string)=>Promise<string[]>,
+        launchQuery:(data:QueryRequest)=>Promise<void>,
         connect:(data:AddConnectionType)=>Promise<void>,
-        subscribeContainers:(callback:(containers:string[])=>void)=>void
+        subscribeContainers:(callback:(containers:string[])=>void)=>void,
+        subscribeQueryResult:(callback:(result:any[])=>void)=>void,
+        subscribeQueryCount:(callback:(result:number)=>void)=>void
     }
 }
