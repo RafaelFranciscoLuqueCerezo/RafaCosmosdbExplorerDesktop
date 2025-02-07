@@ -6,7 +6,19 @@ contextBridge.exposeInMainWorld("electron",{
     getContainers: (data:string) => ipcRenderer.invoke("getContainers",data),
     launchQuery: (data:QueryRequest) => ipcRenderer.invoke("launchQuery",data),
     readDbConnections: () => ipcRenderer.invoke("readDbConnections"),
-    subscribeContainers: (callback:(containers:string[])=>void) => ipcRenderer.on('containers', (_event, value) => callback(value)),
-    subscribeQueryResult: (callback:(result:any[])=>void) => ipcRenderer.on('sql-result', (_event, value) => callback(value)),
-    subscribeQueryCount: (callback:(result:number)=>void) => ipcRenderer.on('sql-count', (_event, value) => callback(value))
+    subscribeContainers: (callback:(containers:string[])=>void) => {
+        const callBack = (_event:any, value:any) => callback(value);
+        ipcRenderer.on('containers', callBack);
+        return ()=>ipcRenderer.off('containers',callBack);
+    },
+    subscribeQueryResult: (callback:(value:any[])=>void) => {
+        const callBack = (_event:any, value:any) => callback(value);
+        ipcRenderer.on('sql-result', callBack);
+        return ()=>ipcRenderer.off('sql-result',callBack);
+    },
+    subscribeQueryCount: (callback:(value:number)=>void) => {
+        const callBack = (_event:any, value:any) => callback(value);
+        ipcRenderer.on('sql-count', callBack);
+        return ()=>ipcRenderer.off('sql-count',callBack);
+    },
 } satisfies Window['electron'])

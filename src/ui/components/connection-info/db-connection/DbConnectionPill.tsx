@@ -42,12 +42,18 @@ export default function DbConnectionPill({config}:Props){
     useEffect(()=>{
         //Llamar a electron para obtener los containers, solo llamarlo una vez
         console.log(`HOLITA DESDE ${config.dbName}`);
+        let unSub : UnSubFunction | undefined = undefined;
         const asyncFunction = async () => {
             window.electron.connect(config)
             .then((_)=>window.electron.getContainers(config.label))
-            .then((_)=>window.electron.subscribeContainers((cnt:string[])=>setContainers(cnt)))
+            .then((_)=>unSub = window.electron.subscribeContainers((cnt:string[])=>setContainers(cnt)))
           }
         asyncFunction();
+        return ()=>{
+            if(unSub !== undefined){
+                unSub();
+            }
+        }
 
     },[])
     return(
