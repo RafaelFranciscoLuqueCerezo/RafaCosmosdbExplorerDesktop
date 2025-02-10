@@ -33,7 +33,7 @@ function recursiveSearch(element:any,matchedResult:any[],text:string):void{
         let value:any = element[key];
         //todo este intanceOf no funciona
         if( !(value instanceof Object)){
-            if(value.includes(text)){
+            if(String(value).includes(text)){
                 matchedResult.push(element);
                 return;
             }
@@ -51,7 +51,7 @@ export const SqlSection = ({operation}:Props)=>{
     const [sql,setSql] = useState("");
     const [result,setResult] = useState<any[]>([]);
     const [count,setCount] = useState(0);
-    const [highlightResult,setHighlightedResult] = useState<any[]>([]);
+    const [highlightResult,setHighlightedResult] = useState<any[] | undefined>(undefined);
     const textAreaRef = useRef<any>(null);
     const jsonRef = useRef<any>(null);
 
@@ -90,7 +90,7 @@ export const SqlSection = ({operation}:Props)=>{
 
     const search = useCallback((text:string)=>{
         if(text==''){
-            setHighlightedResult([]);
+            setHighlightedResult(undefined);
         }
         const matched:any[] = searchThroughResult(result,text);
         setHighlightedResult(matched);
@@ -99,7 +99,10 @@ export const SqlSection = ({operation}:Props)=>{
 
 
     const getResult = useCallback(()=>{
-        return highlightResult.length == 0 ? result : highlightResult;
+        console.log(highlightResult);
+        const temp =   (highlightResult!=undefined && highlightResult.length == 0 ) ? result : highlightResult;
+        console.log(temp);
+        return temp;
     },[result,highlightResult])
 
 
