@@ -8,8 +8,9 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Chip from '@mui/material/Chip';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import IconButton from '@mui/material/IconButton';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import JSONPretty from 'react-json-pretty';
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 }
 
 function searchThroughResult(result:any[],text:string):any[]{
+    text.trim();
     if(result.length==0){
         return [];
     }
@@ -31,7 +33,6 @@ function searchThroughResult(result:any[],text:string):any[]{
 function recursiveSearch(element:any,matchedResult:any[],text:string):void{
     for(let key in element){
         let value:any = element[key];
-        //todo este intanceOf no funciona
         if( !(value instanceof Object)){
             if(String(value).includes(text)){
                 matchedResult.push(element);
@@ -91,6 +92,7 @@ export const SqlSection = ({operation}:Props)=>{
     const search = useCallback((text:string)=>{
         if(text==''){
             setHighlightedResult(undefined);
+            return;
         }
         const matched:any[] = searchThroughResult(result,text);
         setHighlightedResult(matched);
@@ -99,13 +101,19 @@ export const SqlSection = ({operation}:Props)=>{
 
 
     const getResult = useCallback(()=>{
-        console.log(highlightResult);
-        const temp =   (highlightResult!=undefined && highlightResult.length == 0 ) ? result : highlightResult;
-        console.log(temp);
-        return temp;
+        return highlightResult == undefined ? result : highlightResult;
+    },[result,highlightResult]);
+
+    const copyContent = useCallback(()=>{
+        const info : string = JSON.stringify(getResult(),null,3);
+        navigator.clipboard.writeText(info);
+    },[highlightResult,result])
+
+
+    const deleteContent = useCallback(()=>{
+        getResult().map((element:any)=>element.id);
+
     },[result,highlightResult])
-
-
 
 
     
@@ -147,16 +155,18 @@ export const SqlSection = ({operation}:Props)=>{
                 <div className='result-sql'>
                     <div className='search'>
                     <SearchIcon style={{position:'absolute',top:'0',left:'10px'}}/>
-                    <Chip style={{position:'absolute', top: '40px', right:'75px'}} icon={<TravelExploreIcon color='info' />} label={count} />
-                    <IconButton style={{position:'absolute',top: '35px', right:'35px'}} onClick={(_)=>console.log('asdf')} color='info'>
-                        <OpenInNewIcon />
+                    {highlightResult != undefined && <Chip style={{position:'absolute', top: '40px', right:'155px'}} icon={<LocationSearchingIcon color='info' />} label={highlightResult.length} />}
+                    <Chip style={{position:'absolute', top: '40px', right:'80px'}} icon={<TravelExploreIcon color='info' />} label={count} />
+                    <IconButton style={{position:'absolute',top: '35px', right:'35px'}} onClick={copyContent} color='info'>
+                        <ContentCopyIcon />
                     </IconButton>
                     <IconButton style={{position:'absolute',top: '35px', right:'0'}} onClick={(_)=>console.log('asdf')} color='error'>
                         <DeleteRoundedIcon />
                     </IconButton>
                     <input type='search' placeholder='buscar...' onChange={(event:any)=>search(event.target.value)}/>
                     </div>
-                    <JSONPretty ref={jsonRef} style={{width:'500px', overflowX:'hidden'}} id='result-sql-json' data={getResult()} keyStyle='color:#fc7d7d;font-weight:bold' stringStyle='color:#7d83fc' booleanStyle='color:#f95b9a;font-weight:bold' />
+                    <JSONPretty ref={jsonRef} style={{width:'1000px'}} id='result-sql-json' data={getResult()} keyStyle='color:#fc7d7d;font-weight:bold' stringStyle='color:#7d83fc' booleanStyle='color:#f95b9a;font-weight:bold' />
+
                 </div>
                 
                 
