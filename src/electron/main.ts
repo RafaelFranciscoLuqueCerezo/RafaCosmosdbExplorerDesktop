@@ -1,5 +1,5 @@
 import {app, BrowserWindow,ipcMain,Menu } from 'electron';
-import { ConnectionMode, CosmosClient, FeedResponse } from "@azure/cosmos";
+import { ConnectionMode, CosmosClient, FeedResponse, ItemResponse } from "@azure/cosmos";
 import https from 'https';
 import path from 'path';
 import { CERT_FOLDER, DATA_FILE, isDev } from './util.js';
@@ -71,7 +71,25 @@ async function launchQuery(op:Operation,sentence:string):Promise<void>{
         mainWindow.webContents.send('sql-count',result.resources.length);
     })
     //launch query para el conteo
+}
 
+async function deleteItems(op:Operation,ids:string[]): Promise<ItemResponse<any>[]>|void{
+    const savedConnection : Client|undefined = cosmosdbClients.find((x:Client)=>x.label == op.dbLabel);
+    if(savedConnection == undefined){
+        return;
+    }
+    const client : CosmosClient = savedConnection.client as CosmosClient;
+    let promises: Promise<ItemResponse<any>>[] = []
+    //remover items del contenedor
+    ids.forEach((id:string)=>{
+        promises.push(
+        client.database(savedConnection.dbName)
+        .container(op.container)
+        .item(id,null)
+        .delete());
+    });
+
+    return Promise.all(promises);
     
 }
 

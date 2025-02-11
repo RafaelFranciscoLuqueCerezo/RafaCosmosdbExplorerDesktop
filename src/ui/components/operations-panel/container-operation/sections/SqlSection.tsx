@@ -111,7 +111,8 @@ export const SqlSection = ({operation}:Props)=>{
 
 
     const deleteContent = useCallback(()=>{
-        getResult().map((element:any)=>element.id);
+        const itemsToDelete = getResult().map((element:any)=>element.id);
+        console.log(itemsToDelete);
 
     },[result,highlightResult])
 
@@ -160,7 +161,7 @@ export const SqlSection = ({operation}:Props)=>{
                     <IconButton style={{position:'absolute',top: '35px', right:'35px'}} onClick={copyContent} color='info'>
                         <ContentCopyIcon />
                     </IconButton>
-                    <IconButton style={{position:'absolute',top: '35px', right:'0'}} onClick={(_)=>console.log('asdf')} color='error'>
+                    <IconButton style={{position:'absolute',top: '35px', right:'0'}} onClick={deleteContent} color='error'>
                         <DeleteRoundedIcon />
                     </IconButton>
                     <input type='search' placeholder='buscar...' onChange={(event:any)=>search(event.target.value)}/>
