@@ -66,14 +66,15 @@ async function launchQuery(op:Operation,sentence:string):Promise<void>{
     .query(sentence,undefined)
     .fetchAll()
     .then((result:FeedResponse<any>)=>{
-        console.log(result.resources);
         mainWindow.webContents.send('sql-result',result.resources);
         mainWindow.webContents.send('sql-count',result.resources.length);
     })
     //launch query para el conteo
 }
 
-async function deleteItems(op:Operation,ids:string[]): Promise<ItemResponse<any>[]>|void{
+async function deleteItems(op:Operation,ids:string[]): Promise<void>{
+    console.log(ids);
+    console.log(op);
     const savedConnection : Client|undefined = cosmosdbClients.find((x:Client)=>x.label == op.dbLabel);
     if(savedConnection == undefined){
         return;
@@ -85,11 +86,15 @@ async function deleteItems(op:Operation,ids:string[]): Promise<ItemResponse<any>
         promises.push(
         client.database(savedConnection.dbName)
         .container(op.container)
-        .item(id,null)
+        .item(id)
         .delete());
     });
 
-    return Promise.all(promises);
+    return Promise.all(promises).then((response)=>{
+        mainWindow.webContents.send('popup',{type:'ok',message:`los documentos fueron borrados exitosamente`})
+    }).catch((error)=>{
+        mainWindow.webContents.send('popup',{type:'ko',message:`Algo salio mal al eliminar los documentos del contenedor ${op.container} de la base de datos ${op.dbLabel}`})
+    });
     
 }
 
@@ -159,4 +164,5 @@ app.whenReady().then(()=>{
     ipcMain.handle("connect",(event:any,payload:AddConnectionType)=>{connect(payload)})
     ipcMain.handle("getContainers",(event:any,payload:string)=>{getContainers(payload)})
     ipcMain.handle("launchQuery",(event:any,payload:QueryRequest)=>{launchQuery(payload.op,payload.sentence)})
+    ipcMain.handle("deleteItems",(event:any,payload:DeleteItemRequest)=>{deleteItems(payload.op,payload.ids)})
 })

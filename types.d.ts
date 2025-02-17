@@ -28,6 +28,21 @@ type QueryRequest = {
     sentence:string
 }
 
+type DeleteItemRequest = {
+    op:Operation,
+    ids:string[]
+}
+
+type ImportDocumentRequest = {
+    op:Operation,
+    content:any[]
+}
+
+type PopUpProps = {
+    type: 'no'| 'ok' | 'ko',
+    message: string
+}
+
 type UnSubFunction = () => void;
 
 interface Window {
@@ -36,9 +51,16 @@ interface Window {
         readDbConnections:()=>Promise<AddConnectionType[]>,
         getContainers:(data:string)=>Promise<string[]>,
         launchQuery:(data:QueryRequest)=>Promise<void>,
+        deleteItems:(data:DeleteItemRequest)=>Promise<void>,
+        deleteContainer:(data:Operation)=>Promise<void>,
+        deleteDataBase:(data:string)=>Promise<void>,
+        cleanContainer:(data:Operation)=>Promise<void>,
+        cleanDataBase:(data:string)=>Promise<void>,
+        importDocument:(data:ImportDocumentRequest)=>Promise<void>,
         connect:(data:AddConnectionType)=>Promise<void>,
         subscribeContainers:(callback:(containers:string[])=>void)=>UnSubFunction,
         subscribeQueryResult:(callback:(result:any[])=>void)=>UnSubFunction,
-        subscribeQueryCount:(callback:(result:number)=>void)=>UnSubFunction
+        subscribeQueryCount:(callback:(result:number)=>void)=>UnSubFunction,
+        subscribePopup:(callback:(result:PopUpResponse)=>void)=>UnSubFunction
     }
 }

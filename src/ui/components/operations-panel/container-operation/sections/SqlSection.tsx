@@ -112,8 +112,7 @@ export const SqlSection = ({operation}:Props)=>{
 
     const deleteContent = useCallback(()=>{
         const itemsToDelete = getResult().map((element:any)=>element.id);
-        console.log(itemsToDelete);
-
+        window.electron.deleteItems({op:operation,ids:itemsToDelete});
     },[result,highlightResult])
 
 
