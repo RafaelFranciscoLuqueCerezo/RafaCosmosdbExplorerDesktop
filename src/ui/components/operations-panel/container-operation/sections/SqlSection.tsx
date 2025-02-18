@@ -126,7 +126,7 @@ export const SqlSection = ({operation}:Props)=>{
             height:'100%'
           }}>
             <Grid sx={{height:'30%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0',position:'relative'}}>
-                <textarea ref={textAreaRef} spellCheck='false' className='editor-sql' value={sql} 
+                <textarea style={{paddingLeft:'40px'}} ref={textAreaRef} spellCheck='false' className='editor-sql' value={sql} 
                 onChange={
                     (event)=>{
                         CntOpMap.addSql(operation,event.target.value)
@@ -147,7 +147,7 @@ export const SqlSection = ({operation}:Props)=>{
                     >
                 
                 </textarea>
-                <IconButton style={{position:'absolute',right:'15px',top:'10px'}} onClick={playQuery} color='info'>
+                <IconButton style={{position:'absolute',left:'0px',top:'10px'}} onClick={playQuery} color='info'>
                     <PlayArrowIcon />
                 </IconButton>
             </Grid>

@@ -5,3 +5,10 @@
   display: flex;
   background-color: white;
 }
+
+.css-po84cw-MuiButtonBase-root-MuiIconButton-root{
+  --IconButton-hoverBg: none !important;
+  &:focus {
+    outline: none !important;
+  }
+}

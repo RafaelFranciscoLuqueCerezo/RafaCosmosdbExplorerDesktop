@@ -40,6 +40,7 @@ type ImportDocumentRequest = {
 
 type PopUpProps = {
     type: 'no'| 'ok' | 'ko',
+    title:string,
     message: string
 }
 

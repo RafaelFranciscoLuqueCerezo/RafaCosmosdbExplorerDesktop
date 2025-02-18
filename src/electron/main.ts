@@ -91,9 +91,9 @@ async function deleteItems(op:Operation,ids:string[]): Promise<void>{
     });
 
     return Promise.all(promises).then((response)=>{
-        mainWindow.webContents.send('popup',{type:'ok',message:`los documentos fueron borrados exitosamente`})
+        mainWindow.webContents.send('popup',{type:'ok',title:`${op.dbLabel} ${op.container}`,message:`los documentos fueron borrados exitosamente`})
     }).catch((error)=>{
-        mainWindow.webContents.send('popup',{type:'ko',message:`Algo salio mal al eliminar los documentos del contenedor ${op.container} de la base de datos ${op.dbLabel}`})
+        mainWindow.webContents.send('popup',{type:'ko',title:`${op.dbLabel} ${op.container}`,message:`Algo salio mal al eliminar los documentos del contenedor ${op.container} de la base de datos ${op.dbLabel}`})
     });
     
 }
