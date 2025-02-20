@@ -35,7 +35,7 @@ type DeleteItemRequest = {
 
 type ImportDocumentRequest = {
     op:Operation,
-    content:any[]
+    content:string
 }
 
 type PopUpProps = {
@@ -62,6 +62,7 @@ interface Window {
         subscribeContainers:(callback:(containers:string[])=>void)=>UnSubFunction,
         subscribeQueryResult:(callback:(result:any[])=>void)=>UnSubFunction,
         subscribeQueryCount:(callback:(result:number)=>void)=>UnSubFunction,
-        subscribePopup:(callback:(result:PopUpResponse)=>void)=>UnSubFunction
+        subscribePopup:(callback:(result:PopUpResponse)=>void)=>UnSubFunction,
+        subscribeLoader:(callback:(result:boolean)=>void)=>UnSubFunction
     }
 }

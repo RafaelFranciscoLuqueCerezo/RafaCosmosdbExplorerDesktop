@@ -4,6 +4,7 @@ import ConnectionInfo from './components/connection-info/ConnectionInfo'
 import OperationsPanel from './components/operations-panel/OperationsPanel'
 import { useAppStore } from './store/ApplicationStore';
 import { Popup } from './components/popup/Popup';
+import { Loader } from './components/loader/Loader';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <div id='mainContainer'>
+      <Loader/>
       <Popup />
       <ConnectionInfo/>
       <OperationsPanel/>

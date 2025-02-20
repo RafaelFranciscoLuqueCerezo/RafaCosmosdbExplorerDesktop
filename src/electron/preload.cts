@@ -32,4 +32,9 @@ contextBridge.exposeInMainWorld("electron",{
         ipcRenderer.on('popup', callBack);
         return ()=>ipcRenderer.off('popup',callBack);
     },
+    subscribeLoader: (callback:(value:boolean)=>void) => {
+        const callBack = (_event:any, value:any) => callback(value);
+        ipcRenderer.on('loader', callBack);
+        return ()=>ipcRenderer.off('loader',callBack);
+    },
 } satisfies Window['electron'])

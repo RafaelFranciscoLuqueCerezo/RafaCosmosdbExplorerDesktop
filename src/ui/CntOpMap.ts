@@ -1,7 +1,7 @@
 type BackupOperation = {
     sql:string,
     result:any[],
-    import:any[],
+    import:string,
     count: number
 }
 
@@ -16,7 +16,7 @@ export class CntOpMap {
         if(this.map.has(this.getId(id))){
             return;
         }
-        this.map.set(this.getId(id),{sql:'SELECT * FROM c',result:[],import:[],count:0});
+        this.map.set(this.getId(id),{sql:'SELECT * FROM c',result:[],import:'[]',count:0});
     }
     static getSql(id:Operation):string{
         const retrieved = this.map.get(this.getId(id));
@@ -42,10 +42,10 @@ export class CntOpMap {
         return retrieved.result;
     }
 
-    static getImport(id:Operation):any[]{
+    static getImport(id:Operation):string{
         const retrieved = this.map.get(this.getId(id));
         if(retrieved==undefined){
-            return [];
+            return '';
         }
         return retrieved.import;
     }
@@ -71,7 +71,7 @@ export class CntOpMap {
         }
     }
 
-    static addImport(id:Operation,value:any[]):void{
+    static addImport(id:Operation,value:string):void{
         if(this.map.has(this.getId(id))){
             //@ts-ignore
             this.map.get(this.getId(id)).import = value;

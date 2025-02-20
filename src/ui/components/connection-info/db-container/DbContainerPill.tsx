@@ -74,7 +74,7 @@ export const DbContainerPill=({container,dbLabel}:Props)=>{
         </ListItemIcon>
         <Typography variant="inherit">Limpiar contenedor</Typography>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={(_)=>{window.electron.cleanContainer({dbLabel,container,type:'SQL'})}}>
         <ListItemIcon>
             <DeleteForeverIcon/>
         </ListItemIcon>

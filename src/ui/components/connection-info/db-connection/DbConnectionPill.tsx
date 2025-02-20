@@ -89,13 +89,7 @@ export default function DbConnectionPill({config}:Props){
                     <ListItemIcon>
                         <CleanHandsIcon/>
                     </ListItemIcon>
-                    <Typography variant="inherit">Limpiar contenedor</Typography>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <AddIcon/>
-                    </ListItemIcon>
-                    <Typography variant="inherit">Crear borrado programado</Typography>
+                    <Typography variant="inherit">Limpiar base de datos</Typography>
                     </MenuItem>
                 </Menu>
         </div>
