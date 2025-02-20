@@ -309,9 +309,11 @@ function readDbConnections() : AddConnectionType[]{
     try{
         let data = fs.readFileSync(DATA_FILE,"utf-8");
         let appLocalData:DataType = JSON.parse(data);
+        console.log(appLocalData.dbConnections)
         return appLocalData.dbConnections;
 
     } catch (err){
+        console.log(err);
         return [];
     }
 }

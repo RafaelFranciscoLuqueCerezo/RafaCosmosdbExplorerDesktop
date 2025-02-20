@@ -13,7 +13,7 @@ export default function ConnectionInfo(){
     const connections = useAppStore((state)=>state.connections);
 
     useEffect(()=>{
-        
+        console.log(connections);
     },[])
     
 
