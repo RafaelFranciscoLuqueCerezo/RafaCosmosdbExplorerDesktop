@@ -137,7 +137,7 @@ async function cleanContainers(op:Operation[]): Promise<void>{
     let message:string = '';
     let errTitle:string = '';
     let errMessage:string = '';
-    if(op.length == 0){
+    if(op.length == 1){
         title = 'Exito en la limpieza';
         errTitle = 'Error en la limpieza';
         message = 'El contenedor ha sido limpiado exitosamente';
@@ -173,8 +173,10 @@ async function cleanContainers(op:Operation[]): Promise<void>{
     
 
     return Promise.all(promises).then((response)=>{
-        mainWindow.webContents.send('popup',{type:'ok',title,message});
-        finishLoader();
+        return getContainers(op[0].dbLabel).then((_)=>{
+            mainWindow.webContents.send('popup',{type:'ok',title,message});
+            finishLoader();
+        })
     }).catch((error)=>{
         mainWindow.webContents.send('popup',{type:'ko',title:errTitle,message:`${errMessage}. Razon: ${error}`});
         finishLoader();
@@ -207,6 +209,55 @@ async function importDocument(request:ImportDocumentRequest):Promise<void>{
 }
 
 
+async function deleteContainers(op:Operation[]):Promise<void>{
+    initLoader();
+    if(op.length == 0 ){
+        finishLoader();
+        return;
+    }
+    const savedConnection : Client|undefined = cosmosdbClients.find((x:Client)=>x.label == op[0].dbLabel);
+    if(savedConnection == undefined){
+        finishLoader();
+        return;
+    }
+    const client : CosmosClient = savedConnection.client as CosmosClient;
+    let promises: Promise<any>[] = [];
+
+    let title:string = '';
+    let message:string = '';
+    let errTitle:string = '';
+    let errMessage:string = '';
+    if(op.length == 1){
+        title = 'Exito en la borrado';
+        errTitle = 'Error en el borrado';
+        message = 'El contenedor ha sido borrado exitosamente';
+        errMessage = 'No se pudo borrar el contenedor';
+    } else {
+        title = 'Exito en el borrado de la base de datos';
+        message = 'La base de datos ha sido borrada exitosamente, no existen contenedores'
+        errTitle = 'Error en el borrado de la base de datos';
+        errMessage = 'No se pudo borrar todos los contenedores de la base de datos, algo salio mal'
+    }
+
+    //delete containers
+    op.forEach((element:Operation)=>{
+        promises.push(
+            client.database(savedConnection.dbName).container(element.container).delete()
+        )
+    })
+
+    return Promise.all(promises).then((_)=>{
+        return getContainers(op[0].dbLabel).then((_)=>{
+            mainWindow.webContents.send('popup',{type:'ok',title,message});
+            finishLoader();
+        })
+    }).catch((error)=>{
+        mainWindow.webContents.send('popup',{type:'ko',title:errTitle,message:`${errMessage}. Razon: ${error}`});
+        finishLoader();
+    });
+}
+
+
 
 function saveDbConfig(connectionConfig:AddConnectionType){
     initLoader();
@@ -229,6 +280,27 @@ function saveDbConfig(connectionConfig:AddConnectionType){
         fs.writeFileSync(path.join(CERT_FOLDER,`${connectionConfig.label}.crt`),buffer);
         finishLoader();
         
+    }
+
+}
+
+async function removeDbConfig(label:string):Promise<void>{
+    initLoader();
+    try{
+        const data = fs.readFileSync(DATA_FILE,"utf-8");
+        let appLocalData:DataType = JSON.parse(data);
+        const newConfig : AddConnectionType[] = appLocalData.dbConnections.filter((element:AddConnectionType)=>element.label!==label)
+        fs.writeFileSync(DATA_FILE,JSON.stringify(newConfig));
+        fs.unlinkSync(path.join(CERT_FOLDER,`${label}.crt`))
+        return getContainers(label).then((_)=>{
+            mainWindow.webContents.send('popup',{type:'ok',title:`Conexion borrada con ${label}`,message:'La conexion con la base de datos ha sido borrada exitosamente'});
+            finishLoader();
+        })
+    
+
+    }catch(err){
+        //popup diciendo que algo salio mal
+        mainWindow.webContents.send('popup',{type:'ko',title:`Error en la base de datos ${label}`,message:'No se pudo borrar la conexion con la base de datos'});
     }
 
 }
@@ -267,11 +339,15 @@ app.on("ready" ,()=>{
 })
 app.whenReady().then(()=>{
     ipcMain.handle("saveDbConfig",(event:any,payload:AddConnectionType)=>{saveDbConfig(payload)})
+    ipcMain.handle("removeDbConfig",(event:any,payload:string)=>{removeDbConfig(payload)})
     ipcMain.handle("readDbConnections", ()=>readDbConnections())
     ipcMain.handle("connect",(event:any,payload:AddConnectionType)=>{connect(payload)})
     ipcMain.handle("getContainers",(event:any,payload:string)=>{getContainers(payload)})
     ipcMain.handle("launchQuery",(event:any,payload:QueryRequest)=>{launchQuery(payload.op,payload.sentence)})
     ipcMain.handle("deleteItems",(event:any,payload:DeleteItemRequest)=>{deleteItems(payload.op,payload.ids)})
     ipcMain.handle("cleanContainer",(event:any,payload:Operation)=>{cleanContainers([{dbLabel:payload.dbLabel,container:payload.container,type:'NONE'}])})
+    ipcMain.handle("deleteContainer",(event:any,payload:Operation)=>{deleteContainers([{dbLabel:payload.dbLabel,container:payload.container,type:'NONE'}])})
+    ipcMain.handle("cleanAllContainers",(event:any,payload:Operation[])=>{cleanContainers(payload)})
+    ipcMain.handle("deleteAllContainers",(event:any,payload:Operation[])=>{deleteContainers(payload)})
     ipcMain.handle("importDocument",(event:any,payload:ImportDocumentRequest)=>{importDocument(payload)})
 })

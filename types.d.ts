@@ -44,19 +44,21 @@ type PopUpProps = {
     message: string
 }
 
+
 type UnSubFunction = () => void;
 
 interface Window {
     electron:{
         saveDbConfig: (data:AddConnectionType)=>Promise<void>,
+        removeDbConfig: (data:string)=>Promise<void>,
         readDbConnections:()=>Promise<AddConnectionType[]>,
         getContainers:(data:string)=>Promise<string[]>,
         launchQuery:(data:QueryRequest)=>Promise<void>,
         deleteItems:(data:DeleteItemRequest)=>Promise<void>,
         deleteContainer:(data:Operation)=>Promise<void>,
-        deleteDataBase:(data:string)=>Promise<void>,
+        deleteAllContainers:(data:Operation[])=>Promise<void>,
         cleanContainer:(data:Operation)=>Promise<void>,
-        cleanDataBase:(data:string)=>Promise<void>,
+        cleanAllContainers:(data:Operation[])=>Promise<void>,
         importDocument:(data:ImportDocumentRequest)=>Promise<void>,
         connect:(data:AddConnectionType)=>Promise<void>,
         subscribeContainers:(callback:(containers:string[])=>void)=>UnSubFunction,

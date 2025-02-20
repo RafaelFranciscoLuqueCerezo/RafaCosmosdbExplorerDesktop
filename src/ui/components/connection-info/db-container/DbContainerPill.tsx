@@ -68,13 +68,13 @@ export const DbContainerPill=({container,dbLabel}:Props)=>{
         </ListItemIcon>
         <Typography variant="inherit">Operaciones</Typography>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={(_)=>window.electron.cleanContainer({container,dbLabel,type:'NONE'})}>
         <ListItemIcon>
             <CleanHandsIcon/>
         </ListItemIcon>
         <Typography variant="inherit">Limpiar contenedor</Typography>
         </MenuItem>
-        <MenuItem onClick={(_)=>{window.electron.cleanContainer({dbLabel,container,type:'SQL'})}}>
+        <MenuItem onClick={(_)=>{window.electron.deleteContainer({dbLabel,container,type:'SQL'})}}>
         <ListItemIcon>
             <DeleteForeverIcon/>
         </ListItemIcon>

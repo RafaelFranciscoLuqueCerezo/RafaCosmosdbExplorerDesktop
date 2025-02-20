@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import FolderIcon from '@mui/icons-material/Folder';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CleanHandsIcon from '@mui/icons-material/CleanHands';
-import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import React from "react";
 import './DbConnectionPill.css'
 import { DbContainerPill } from "../db-container/DbContainerPill";
+import { useAppStore } from "../../../store/ApplicationStore";
 
 type Props ={
     config:AddConnectionType
@@ -19,6 +19,8 @@ export default function DbConnectionPill({config}:Props){
         mouseX: number;
         mouseY: number;
       } | null>(null);
+    
+    const removeConnection = useAppStore((state)=>state.removeConnection);
 
     const handleContextMenu = useCallback((event: React.MouseEvent) => {
         event.preventDefault();
@@ -40,21 +42,11 @@ export default function DbConnectionPill({config}:Props){
     },[]);
 
     useEffect(()=>{
-        //Llamar a electron para obtener los containers, solo llamarlo una vez
-        console.log(`HOLITA DESDE ${config.dbName}`);
-        let unSub : UnSubFunction | undefined = undefined;
-        const asyncFunction = async () => {
-            window.electron.connect(config)
-            .then((_)=>window.electron.getContainers(config.label))
-            .then((_)=>unSub = window.electron.subscribeContainers((cnt:string[])=>setContainers(cnt)))
-          }
-        asyncFunction();
-        return ()=>{
-            if(unSub !== undefined){
-                unSub();
-            }
+        const unSub : UnSubFunction = window.electron.subscribeContainers((cnt:string[])=>setContainers(cnt));
+        window.electron.connect(config).then((_)=>window.electron.getContainers(config.label));
+        return()=>{
+            unSub();
         }
-
     },[])
     return(
         <div className="dbConnectionPillContainer" style={{overflowY: 'auto'}}>
@@ -66,7 +58,7 @@ export default function DbConnectionPill({config}:Props){
                     </ListItemButton>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {containers.map((container:string)=><DbContainerPill dbLabel={config.label} container={container}/>)}
+                        {containers.map((container:string,index:number)=><DbContainerPill key={`${config.label}-${container}-${index}`} dbLabel={config.label} container={container}/>)}
                     </List>
                 </Collapse>
                 <Menu
@@ -79,17 +71,33 @@ export default function DbConnectionPill({config}:Props){
                         : undefined
                     }
                     >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={(_)=>{
+                        window.electron.removeDbConfig(config.label).then((_)=>{
+                            removeConnection(config.label)
+                        })
+                    }}>
                     <ListItemIcon>
                         <DeleteForeverIcon/>
                     </ListItemIcon>
                     <Typography variant="inherit">Borrar conexion</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={(_)=>{
+                        const containersOperation: Operation[] = containers.map((container:string)=>({dbLabel:config.label,container,type:'NONE'}));
+                        window.electron.cleanAllContainers(containersOperation);
+                    }}>
                     <ListItemIcon>
                         <CleanHandsIcon/>
                     </ListItemIcon>
-                    <Typography variant="inherit">Limpiar base de datos</Typography>
+                    <Typography variant="inherit">Limpiar contenedores</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={(_)=>{
+                        const containersOperation: Operation[] = containers.map((container:string)=>({dbLabel:config.label,container,type:'NONE'}));
+                        window.electron.deleteAllContainers(containersOperation);
+                    }}>
+                    <ListItemIcon>
+                        <DeleteOutlineIcon/>
+                    </ListItemIcon>
+                    <Typography variant="inherit">Borrar contenedores</Typography>
                     </MenuItem>
                 </Menu>
         </div>

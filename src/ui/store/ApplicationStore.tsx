@@ -10,7 +10,7 @@ export interface Store {
     addConnection:(connection:AddConnectionType)=>void,
     addOperation:(operation:Operation)=>void,
     initConnections:(connections:AddConnectionType[])=>void,
-    removeConnection:(position:number)=>void,
+    removeConnection:(label:string)=>void,
     removeOperation:(operation:Operation)=>void,
 }
 export enum Page {
@@ -43,8 +43,8 @@ export const useAppStore = create<Store>((set) => ({
     }),
     addConnection: (connection:AddConnectionType) => set((state)=>({connections:[...state.connections,connection]})),
     initConnections: (connections:AddConnectionType[]) => set(()=>({connections})),
-    removeConnection: (position:number) => set((state)=>{
-        const arrayAfterRemove = state.connections.filter((value,index)=>index!=position);
+    removeConnection: (label:string) => set((state)=>{
+        const arrayAfterRemove = state.connections.filter((value:AddConnectionType)=>value.label !== label);
         return {connections:arrayAfterRemove}
     })
   }));

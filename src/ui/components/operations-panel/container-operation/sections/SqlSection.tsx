@@ -69,9 +69,20 @@ export const SqlSection = ({operation}:Props)=>{
             CntOpMap.addCount(operation,response);
             setCount(response);
         })
+
+
+        //prevenir que el contenido sea dragable, es muy molesto
+        const textarea = textAreaRef.current;
+        const handleDragStart = (e:any) => {
+            e.preventDefault();
+        };
+
+        textarea.addEventListener('dragstart', handleDragStart);
+
         return ()=>{
             resultUnSub();
             countUnSub();
+            textarea.removeEventListener('dragstart', handleDragStart);
         };
 
         
@@ -126,7 +137,7 @@ export const SqlSection = ({operation}:Props)=>{
             height:'100%'
           }}>
             <Grid sx={{height:'30%',display:'flex',justifyContent:'stretch',padding:'5px 5px 5px 0',position:'relative'}}>
-                <textarea style={{paddingLeft:'40px'}} ref={textAreaRef} spellCheck='false' className='editor-sql' value={sql} 
+                <textarea draggable='false' style={{paddingLeft:'40px'}} ref={textAreaRef} spellCheck='false' className='editor-sql' value={sql} 
                 onChange={
                     (event)=>{
                         CntOpMap.addSql(operation,event.target.value)
