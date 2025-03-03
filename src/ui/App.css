@@ -16,3 +16,15 @@
 .no-outline:focus {
   outline: none;
 }
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('./fonts/FiraCode-Regular.otf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('./fonts/FiraCode-Bold.otf') format('truetype');
+  font-weight: bold;
+}

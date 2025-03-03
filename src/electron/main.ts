@@ -92,6 +92,7 @@ async function launchQuery(op:Operation,sentence:string):Promise<void>{
         mainWindow.webContents.send('sql-count',result.resources.length);
     }).catch((err)=>{
         finishLoader();
+        mainWindow.webContents.send('popup',{type:'ko',title:'Sentencia SQL No valida',message:`${err}`})
     })
     
 }
