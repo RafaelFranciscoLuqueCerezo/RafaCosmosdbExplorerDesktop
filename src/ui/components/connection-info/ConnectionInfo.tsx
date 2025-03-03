@@ -3,11 +3,11 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Divider from '@mui/material/Divider';
 import { Page, useAppStore } from '../../store/ApplicationStore';
-import { useCallback, useEffect, useState } from 'react';
-import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { useCallback, useEffect } from 'react';
+import { List } from '@mui/material';
 import DbConnectionPill from './db-connection/DbConnectionPill';
 
-
+  
 export default function ConnectionInfo(){
     const navigateTo = useAppStore((state)=>state.navigateTo);
     const connections = useAppStore((state)=>state.connections);
@@ -39,7 +39,7 @@ export default function ConnectionInfo(){
             <div id='connectionContent'>
                 <div style={{display:'flex', alignItems: 'center'}}>
                     <h4 style={{marginRight:'2px'}}>Conexiones</h4>
-                    <IconButton onClick={()=>navigateTo(Page.ADD_CONNECTION)} aria-label="add" >
+                    <IconButton className='no-outline' onClick={()=>navigateTo(Page.ADD_CONNECTION)} aria-label="add" >
                     <AddIcon />
                     </IconButton>
                 </div>

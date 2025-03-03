@@ -27,7 +27,7 @@ export const Popup = () => {
                     {props.type == 'ko' && <ReportTwoToneIcon color="error" sx={{position:'relative',top:'27px',marginRight:'10px'}}/>}
                     <h2>{props.title}</h2>
                     </div>
-                    <IconButton aria-label="delete" size="small" sx={{position:'relative',bottom:'30px',left:'10px'}} onClick={(_)=>{setProps({type:'no',title:'',message:''})}}>
+                    <IconButton className="no-outline"  aria-label="delete" size="small" sx={{position:'relative',bottom:'30px',left:'10px'}} onClick={(_)=>{setProps({type:'no',title:'',message:''})}}>
                         <CloseIcon/>
                     </IconButton>
                     

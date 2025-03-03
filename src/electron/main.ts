@@ -1,12 +1,13 @@
 import {app, BrowserWindow,ipcMain,Menu } from 'electron';
-import { ConnectionMode, ContainerDefinition, ContainerRequest, ContainerResponse, CosmosClient, FeedResponse, ItemResponse, Resource, ResourceResponse } from "@azure/cosmos";
+import { Agent, ConnectionMode, ContainerDefinition, ContainerRequest, ContainerResponse, CosmosClient, FeedResponse, ItemResponse, Resource, ResourceResponse } from "@azure/cosmos";
 import https from 'https';
 import path from 'path';
 import { CERT_FOLDER, DATA_FILE, isDev } from './util.js';
 import { getPreloadPath } from './pathResolver.js';
 import fs from 'fs';
 
-export let cosmosdbClients : Client[] = [];
+let cosmosdbClients : Client[] = [];
+let cosmosdbAgents : Agent[] = []
 
 //Menu.setApplicationMenu(null);
 
@@ -27,6 +28,11 @@ function connect(config:AddConnectionType){
         finishLoader();
         return;
     }
+    const agent = new https.Agent( {
+        ca: fs.readFileSync(path.join(CERT_FOLDER,`${config.label}.crt`)),
+        keepAlive:true,
+        rejectUnauthorized:false
+    });
     const client = new CosmosClient({
         key: config.secret,
         endpoint: config.endpoint,
@@ -36,13 +42,10 @@ function connect(config:AddConnectionType){
             requestTimeout: 50000,
         
         },
-        agent: new https.Agent( {
-            ca: fs.readFileSync(path.join(CERT_FOLDER,`${config.label}.crt`)),
-            keepAlive:true,
-            rejectUnauthorized:false
-        })
+        agent
     })
     cosmosdbClients.push({label:config.label,dbName:config.dbName,client})
+    cosmosdbAgents.push(agent);
     finishLoader();
 }
 
@@ -62,8 +65,8 @@ async function getContainers(label:string):Promise<void>{
         finishLoader();
         
     } catch (error:any){
-        mainWindow.webContents.send('containers',[]);
         finishLoader();
+        mainWindow.webContents.send('containers',[]);
     }
    
 
@@ -84,8 +87,10 @@ async function launchQuery(op:Operation,sentence:string):Promise<void>{
     .query(sentence,undefined)
     .fetchAll()
     .then((result:FeedResponse<any>)=>{
+        finishLoader();
         mainWindow.webContents.send('sql-result',result.resources);
         mainWindow.webContents.send('sql-count',result.resources.length);
+    }).catch((err)=>{
         finishLoader();
     })
     
@@ -109,12 +114,12 @@ async function deleteItems(op:Operation,ids:string[]): Promise<void>{
         .delete());
     });
 
-    return Promise.all(promises).then((response)=>{
+    return Promise.all(promises).then((_)=>{
+        finishLoader();
         mainWindow.webContents.send('popup',{type:'ok',title:`${op.dbLabel} ${op.container}`,message:`los documentos fueron borrados exitosamente`})
+    }).catch((_)=>{
         finishLoader();
-    }).catch((error)=>{
         mainWindow.webContents.send('popup',{type:'ko',title:`${op.dbLabel} ${op.container}`,message:`Algo salio mal al eliminar los documentos del contenedor ${op.container} de la base de datos ${op.dbLabel}`})
-        finishLoader();
     });
     
 }
@@ -174,12 +179,12 @@ async function cleanContainers(op:Operation[]): Promise<void>{
 
     return Promise.all(promises).then((response)=>{
         return getContainers(op[0].dbLabel).then((_)=>{
-            mainWindow.webContents.send('popup',{type:'ok',title,message});
             finishLoader();
+            mainWindow.webContents.send('popup',{type:'ok',title,message});
         })
     }).catch((error)=>{
-        mainWindow.webContents.send('popup',{type:'ko',title:errTitle,message:`${errMessage}. Razon: ${error}`});
         finishLoader();
+        mainWindow.webContents.send('popup',{type:'ko',title:errTitle,message:`${errMessage}. Razon: ${error}`});
     });
     
 }
@@ -248,12 +253,13 @@ async function deleteContainers(op:Operation[]):Promise<void>{
 
     return Promise.all(promises).then((_)=>{
         return getContainers(op[0].dbLabel).then((_)=>{
-            mainWindow.webContents.send('popup',{type:'ok',title,message});
             finishLoader();
+            mainWindow.webContents.send('popup',{type:'ok',title,message});
         })
     }).catch((error)=>{
-        mainWindow.webContents.send('popup',{type:'ko',title:errTitle,message:`${errMessage}. Razon: ${error}`});
         finishLoader();
+        mainWindow.webContents.send('popup',{type:'ko',title:errTitle,message:`${errMessage}. Razon: ${error}`});
+        
     });
 }
 
@@ -268,6 +274,7 @@ function saveDbConfig(connectionConfig:AddConnectionType){
         fs.writeFileSync(DATA_FILE,JSON.stringify(appLocalData));
 
     }catch(err){
+        console.log('no existe fichero !!!!!')
         const innitalData: DataType = {
             dbConnections:[connectionConfig]
         } 
@@ -309,13 +316,17 @@ function readDbConnections() : AddConnectionType[]{
     try{
         let data = fs.readFileSync(DATA_FILE,"utf-8");
         let appLocalData:DataType = JSON.parse(data);
-        console.log(appLocalData.dbConnections)
         return appLocalData.dbConnections;
 
     } catch (err){
-        console.log(err);
         return [];
     }
+}
+
+function closeAllConnections():void{
+    cosmosdbAgents.forEach((agent:Agent)=>{
+        agent.destroy();
+    });
 }
 
 
@@ -336,9 +347,14 @@ app.on("ready" ,()=>{
     } else {
         mainWindow.loadFile(path.join(app.getAppPath(),'/dist-react/index.html'));
     }
+
+    mainWindow.on('close',(_)=>{
+        closeAllConnections();
+    })
     
 
 })
+
 app.whenReady().then(()=>{
     ipcMain.handle("saveDbConfig",(event:any,payload:AddConnectionType)=>{saveDbConfig(payload)})
     ipcMain.handle("removeDbConfig",(event:any,payload:string)=>{removeDbConfig(payload)})

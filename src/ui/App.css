@@ -12,3 +12,7 @@
     outline: none !important;
   }
 }
+
+.no-outline:focus {
+  outline: none;
+}

@@ -50,7 +50,7 @@ export const ImportSection = ({operation}:Props)=>{
                     }}
                         >
                     </textarea>
-                    <IconButton style={{position:'absolute',left:'0',top:'10px'}} onClick={(_)=>window.electron.importDocument({op:operation,content:importContent})} color='info'>
+                    <IconButton className="no-outline" style={{position:'absolute',left:'0',top:'10px'}} onClick={(_)=>window.electron.importDocument({op:operation,content:importContent})} color='info'>
                             <PlayArrowIcon />
                     </IconButton>
             </div>

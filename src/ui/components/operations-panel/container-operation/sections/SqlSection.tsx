@@ -158,7 +158,7 @@ export const SqlSection = ({operation}:Props)=>{
                     >
                 
                 </textarea>
-                <IconButton style={{position:'absolute',left:'0px',top:'10px'}} onClick={playQuery} color='info'>
+                <IconButton className='no-outline' style={{position:'absolute',left:'0px',top:'10px'}} onClick={playQuery} color='info'>
                     <PlayArrowIcon />
                 </IconButton>
             </Grid>
@@ -168,10 +168,10 @@ export const SqlSection = ({operation}:Props)=>{
                     <SearchIcon style={{position:'absolute',top:'0',left:'10px'}}/>
                     {highlightResult != undefined && <Chip style={{position:'absolute', top: '40px', right:'155px'}} icon={<LocationSearchingIcon color='info' />} label={highlightResult.length} />}
                     <Chip style={{position:'absolute', top: '40px', right:'80px'}} icon={<TravelExploreIcon color='info' />} label={count} />
-                    <IconButton style={{position:'absolute',top: '35px', right:'35px'}} onClick={copyContent} color='info'>
+                    <IconButton className='no-outline' style={{position:'absolute',top: '35px', right:'35px'}} onClick={copyContent} color='info'>
                         <ContentCopyIcon />
                     </IconButton>
-                    <IconButton style={{position:'absolute',top: '35px', right:'0'}} onClick={deleteContent} color='error'>
+                    <IconButton className='no-outline' style={{position:'absolute',top: '35px', right:'0'}} onClick={deleteContent} color='error'>
                         <DeleteRoundedIcon />
                     </IconButton>
                     <input type='search' placeholder='buscar...' onChange={(event:any)=>search(event.target.value)}/>

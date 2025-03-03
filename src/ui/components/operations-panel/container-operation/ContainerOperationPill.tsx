@@ -31,7 +31,7 @@ export const ContainerOperationPill = ({operation}:Props)=>{
             <div>
                 <div  className={`${isActive && 'container-op-active'}`}style={{padding:'2px',backgroundColor: '#f9f9f9', display:"flex",justifyContent:'space-between',minWidth:'154px',whiteSpace:'nowrap',overflow:'hidden'}}>
                         <div style={{cursor:'pointer'}} onClick={(_)=>{changeActiveOperation({...operation,type:tabOperationArray[value]})}} ><strong style={{fontSize:'xx-small'}}>{operation.dbLabel}</strong><span style={{fontSize:'x-small'}}>-{operation.container}</span></div>
-                        <IconButton aria-label="delete" size="small" onClick={(_)=>{removeOperation(operation)}}>
+                        <IconButton className="no-outline" aria-label="delete" size="small" onClick={(_)=>{removeOperation(operation)}}>
                             <CloseIcon fontSize="inherit"/>
                         </IconButton>
                 </div> 
