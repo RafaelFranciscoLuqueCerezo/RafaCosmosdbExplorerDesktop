@@ -1,9 +1,25 @@
 {
   "name": "rafacosmosdbexplorer",
+  "author": "Rafael Francisco Luque Cerezo",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
+  "build": {
+  "appId": "com.rafael.cosmosdbExplorer",
+  "productName": "RafaCosmosDbExplorer",
+  "directories": {
+    "output": "dist"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "portable",
+        "arch": ["x64"]
+      }
+    ]
+  }
+  },
   "scripts": {
     "dev": "npm run transpile:electron && npm-run-all --parallel dev:react dev:electron",
     "dev:react": "vite",
@@ -14,7 +30,8 @@
     "transpile:electron": "tsc --project src/electron/tsconfig.json",
     "dist:mac": "npm run transpile:electron && npm run build && electron-builder --mac --arm64",
     "dist:win": "npm run transpile:electron && npm run build && electron-builder --win --x64",
-    "dist:linux": "npm run transpile:electron && npm run build && electron-builder --linux --x64"
+    "dist:linux": "npm run transpile:electron && npm run build && electron-builder --linux --x64",
+    "dist:portable": "npm run transpile:electron && npm run build && electron-builder --win portable"
   },
   "dependencies": {
     "@azure/cosmos": "^4.2.0",

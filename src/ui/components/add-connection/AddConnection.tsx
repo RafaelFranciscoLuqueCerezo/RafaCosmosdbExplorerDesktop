@@ -53,6 +53,7 @@ export default function AddConnectionPage({connections}:Props){
   
     await window.electron.saveDbConfig(config);
     addConnection(config);
+    setLoading(false);
     navigateTo(Page.BLANK);
     //actualizar store
   },[])

@@ -22,7 +22,7 @@ export const ContainerOperationPill = ({operation}:Props)=>{
     const isActive:boolean = operation.dbLabel == activeOperation.dbLabel && operation.container == activeOperation.container;
 
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (_:any, newValue: number) => {
         setValue(newValue);
     };
 
