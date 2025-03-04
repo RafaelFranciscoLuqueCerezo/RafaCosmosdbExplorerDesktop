@@ -5,21 +5,6 @@
   "version": "0.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
-  "build": {
-  "appId": "com.rafael.cosmosdbExplorer",
-  "productName": "RafaCosmosDbExplorer",
-  "directories": {
-    "output": "dist"
-  },
-  "win": {
-    "target": [
-      {
-        "target": "portable",
-        "arch": ["x64"]
-      }
-    ]
-  }
-  },
   "scripts": {
     "dev": "npm run transpile:electron && npm-run-all --parallel dev:react dev:electron",
     "dev:react": "vite",
