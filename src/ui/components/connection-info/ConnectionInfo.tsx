@@ -2,11 +2,20 @@ import './ConnectionInfo.css'
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Divider from '@mui/material/Divider';
-import { ApplicationStore, Page } from '../../store/ApplicationStore';
-import { useCallback } from 'react';
+import { Page, useAppStore } from '../../store/ApplicationStore';
+import { useCallback, useEffect } from 'react';
+import { List } from '@mui/material';
+import DbConnectionPill from './db-connection/DbConnectionPill';
 
+  
 export default function ConnectionInfo(){
-    const navigateTo = ApplicationStore((state)=>state.navigateTo);
+    const navigateTo = useAppStore((state)=>state.navigateTo);
+    const connections = useAppStore((state)=>state.connections);
+
+    useEffect(()=>{
+        console.log(connections);
+    },[])
+    
 
     const onMouseDown = useCallback(()=>{
         document.addEventListener('mousemove', resize);
@@ -24,16 +33,22 @@ export default function ConnectionInfo(){
         document.removeEventListener('mouseup', stopResize);
     },[]);
 
+
     return (
         <div id="connectionContainer">
             <div id='connectionContent'>
                 <div style={{display:'flex', alignItems: 'center'}}>
                     <h4 style={{marginRight:'2px'}}>Conexiones</h4>
-                    <IconButton onClick={()=>navigateTo(Page.ADD_CONNECTION)} aria-label="add" >
+                    <IconButton className='no-outline' onClick={()=>navigateTo(Page.ADD_CONNECTION)} aria-label="add" >
                     <AddIcon />
                     </IconButton>
                 </div>
                 <Divider />
+                <List>
+                    {
+                       connections !=undefined && connections!=null && connections.map((element,index)=><DbConnectionPill key={`${element.label}-${index}`} config={element}/>)
+                    }    
+                </List>    
                 
             </div>
             <div className='resizable' onMouseDown={onMouseDown}/>

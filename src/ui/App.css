@@ -1,6 +1,30 @@
 #mainContainer{
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
   background-color: white;
+}
+
+.css-po84cw-MuiButtonBase-root-MuiIconButton-root{
+  --IconButton-hoverBg: none !important;
+  &:focus {
+    outline: none !important;
+  }
+}
+
+.no-outline:focus {
+  outline: none;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('./fonts/FiraCode-Regular.otf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('./fonts/FiraCode-Bold.otf') format('truetype');
+  font-weight: bold;
 }

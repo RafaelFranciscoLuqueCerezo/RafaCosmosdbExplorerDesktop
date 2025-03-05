@@ -3,15 +3,39 @@
     width: 200px;
     min-width: 150px;
     display: flex;
+    background-color: rgb(238, 238, 238);
+
 }
+
+#connectionContent::-webkit-scrollbar {
+    position: relative;
+    width: 3px;
+}
+
+#connectionContent::-webkit-scrollbar-track {
+    background:  #fcfcfc;
+    border-radius: 30px;
+}
+
+#connectionContent::-webkit-scrollbar-thumb {
+    background: #3cb190;
+    border-radius: 30px;
+}
+
 #connectionContent{
-    padding: 0 8px 0 8px;
+    padding: 0 0px 0 8px;
     height: 100vh;
     width: 100%;
+    overflow-y: auto;
 }
 .resizable{
     cursor: e-resize;
     height: 100vh;
-    width: 2px;
-    background-color: rgb(255, 0, 0);
+    width: 1px;
+    padding-left: 2px;
+    .active{
+        background-color: rgb(1, 224, 224);;
+    }    &:hover{
+        background-color: rgb(1, 224, 224);
+    }
 }

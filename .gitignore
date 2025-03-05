@@ -12,6 +12,9 @@ dist
 dist-react
 dist-electron
 dist-ssr
+certificates/*
+./local-data.json
+
 *.local
 
 # Editor directories and files
