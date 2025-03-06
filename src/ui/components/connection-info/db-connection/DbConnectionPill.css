@@ -1,12 +1,9 @@
-.dbConnectionPillContainer > .MuiListItemButton-root >  .css-cokf1l-MuiListItemIcon-root{
+.dbConnectionPillContainer > .MuiListItemButton-root > div{
     min-width: 10px !important;
 }
 
-.dbConnectionPillContainer .MuiCollapse-root  .css-cokf1l-MuiListItemIcon-root{
+.dbConnectionPillContainer > .MuiCollapse-root > div > div > div > div > div{
     min-width: 20px !important;
-}
-.dbConnectionPillContainer .css-1k80kex {
-    min-width: 10px !important;
 }
 
 .dbConnectionPillContainer .MuiCollapse-root .MuiListItemText-root span{
