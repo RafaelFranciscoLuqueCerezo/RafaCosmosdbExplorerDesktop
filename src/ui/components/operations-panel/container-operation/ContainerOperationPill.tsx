@@ -37,9 +37,9 @@ export const ContainerOperationPill = ({operation}:Props)=>{
                 </div> 
             </div>
             {isActive && 
-            <Tabs  value={value} onChange={handleChange} aria-label="icon tabs example">
-                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'SQL'})}  icon={<AnalyticsIcon fontSize="inherit"/>} aria-label="sql" />
-                <Tab onClick={(_)=>changeActiveOperation({...operation,type:'IMPORT'})} icon={<AttachFileIcon fontSize="inherit"/>} aria-label="import" />
+            <Tabs className="tabs" value={value} onChange={handleChange} aria-label="icon tabs example">
+                <Tab className="tab" onClick={(_)=>changeActiveOperation({...operation,type:'SQL'})}  icon={<AnalyticsIcon fontSize="inherit"/>} aria-label="sql" />
+                <Tab className="tab" onClick={(_)=>changeActiveOperation({...operation,type:'IMPORT'})} icon={<AttachFileIcon fontSize="inherit"/>} aria-label="import" />
             </Tabs>
             }
         </div>
