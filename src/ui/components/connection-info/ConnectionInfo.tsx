@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Divider from '@mui/material/Divider';
 import { Page, useAppStore } from '../../store/ApplicationStore';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { List } from '@mui/material';
 import DbConnectionPill from './db-connection/DbConnectionPill';
 
@@ -11,11 +11,6 @@ import DbConnectionPill from './db-connection/DbConnectionPill';
 export default function ConnectionInfo(){
     const navigateTo = useAppStore((state)=>state.navigateTo);
     const connections = useAppStore((state)=>state.connections);
-
-    useEffect(()=>{
-        console.log(connections);
-    },[])
-    
 
     const onMouseDown = useCallback(()=>{
         document.addEventListener('mousemove', resize);

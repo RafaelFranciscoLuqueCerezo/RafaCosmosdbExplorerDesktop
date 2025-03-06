@@ -93,7 +93,6 @@ export const SqlSection = ({operation}:Props)=>{
         if(textAreaRef.current==null){
             return;
         }
-        console.log(textAreaRef);
         const sqlQuery = textAreaRef.current.value.substring(textAreaRef.current.selectionStart, textAreaRef.current.selectionEnd);
         window.electron.launchQuery({op:operation,sentence:sqlQuery});
     

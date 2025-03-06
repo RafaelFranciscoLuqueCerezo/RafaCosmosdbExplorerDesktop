@@ -2,7 +2,7 @@ import {app, BrowserWindow,ipcMain,Menu } from 'electron';
 import { Agent, ConnectionMode, ContainerDefinition, ContainerRequest, ContainerResponse, CosmosClient, FeedResponse, ItemResponse, Resource, ResourceResponse } from "@azure/cosmos";
 import https from 'https';
 import path from 'path';
-import { CERT_FOLDER, DATA_FILE, isDev } from './util.js';
+import { CERT_FOLDER, DATA_FILE, initRelativePath, isDev } from './util.js';
 import { getPreloadPath } from './pathResolver.js';
 import fs from 'fs';
 
@@ -275,7 +275,6 @@ function saveDbConfig(connectionConfig:AddConnectionType){
         fs.writeFileSync(DATA_FILE,JSON.stringify(appLocalData));
 
     }catch(err){
-        console.log('no existe fichero !!!!!')
         const innitalData: DataType = {
             dbConnections:[connectionConfig]
         } 
@@ -346,6 +345,7 @@ app.on("ready" ,()=>{
     if (isDev()){
         mainWindow.loadURL('http://localhost:5123');
     } else {
+        initRelativePath();
         mainWindow.loadFile(path.join(app.getAppPath(),'/dist-react/index.html'));
     }
 
