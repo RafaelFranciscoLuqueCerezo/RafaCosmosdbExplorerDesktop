@@ -19,11 +19,10 @@ export enum Page {
     BLANK = 'BLANK'
 }
 export const useAppStore = create<Store>((set) => ({
+    connections: [],
     url: Page.BLANK,
     operations:[],
     activeOperation:{dbLabel:'',container:'',type:'NONE'},
-    //llamar y recuperar del fichero
-    connections: [],
     navigateTo: (url:Page) => set(()=>({url})),
     changeActiveOperation:(op:Operation)=>set(()=>({activeOperation:op})),
     addOperation: (op:Operation)=>set((state)=>{
