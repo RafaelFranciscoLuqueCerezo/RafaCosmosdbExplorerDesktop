@@ -1,5 +1,5 @@
 import {app, BrowserWindow,ipcMain,Menu } from 'electron';
-import { Agent, ConnectionMode, ContainerDefinition, ContainerRequest, ContainerResponse, CosmosClient, FeedResponse, ItemResponse, Resource, ResourceResponse } from "@azure/cosmos";
+import { Agent, ConnectionMode, ContainerDefinition, ContainerRequest, ContainerResponse, CosmosClient, FeedResponse, ItemResponse, Resource } from "@azure/cosmos";
 import https from 'https';
 import path from 'path';
 import { CERT_FOLDER, DATA_FILE, initRelativePath, isDev } from './util.js';
@@ -9,7 +9,7 @@ import fs from 'fs';
 let cosmosdbClients : Client[] = [];
 let cosmosdbAgents : Agent[] = []
 
-Menu.setApplicationMenu(null);
+//Menu.setApplicationMenu(null);
 
 function initLoader(){
     mainWindow.webContents.send('loader',true);
@@ -53,16 +53,17 @@ async function getContainers(label:string):Promise<void>{
     initLoader();
     const element = cosmosdbClients.find((client:Client)=>client.label===label);
     if(element === undefined){
-        mainWindow.webContents.send('containers',[]);
         finishLoader();
+        mainWindow.webContents.send('containers',[]);
         return;
     }
 
     try{
         const client : CosmosClient = element.client as CosmosClient;
         const response = await client.database(element.dbName).containers.readAll().fetchAll();
-        mainWindow.webContents.send('containers',response.resources.map((x)=>x.id));
         finishLoader();
+        mainWindow.webContents.send('containers',response.resources.map((x)=>x.id));
+        
         
     } catch (error:any){
         finishLoader();
@@ -280,12 +281,17 @@ function saveDbConfig(connectionConfig:AddConnectionType){
         } 
         fs.writeFileSync(DATA_FILE,JSON.stringify(innitalData));
     } finally{
-        const buffer = Buffer.from(connectionConfig.label, 'binary');
-        if (!fs.existsSync(CERT_FOLDER)) {
-            fs.mkdirSync(CERT_FOLDER);
+        try{
+            const buffer = Buffer.from(connectionConfig.label, 'binary');
+            if (!fs.existsSync(CERT_FOLDER)) {
+                fs.mkdirSync(CERT_FOLDER);
+            }
+            fs.writeFileSync(path.join(CERT_FOLDER,`${connectionConfig.label}.crt`),buffer);
+            finishLoader();
+        } catch (_){
+            finishLoader();
         }
-        fs.writeFileSync(path.join(CERT_FOLDER,`${connectionConfig.label}.crt`),buffer);
-        finishLoader();
+        
         
     }
 
@@ -300,14 +306,15 @@ async function removeDbConfig(label:string):Promise<void>{
         fs.writeFileSync(DATA_FILE,JSON.stringify(newConfig));
         fs.unlinkSync(path.join(CERT_FOLDER,`${label}.crt`))
         return getContainers(label).then((_)=>{
-            mainWindow.webContents.send('popup',{type:'ok',title:`Conexion borrada con ${label}`,message:'La conexion con la base de datos ha sido borrada exitosamente'});
             finishLoader();
+            mainWindow.webContents.send('popup',{type:'ok',title:`Conexion borrada con ${label}`,message:'La conexion con la base de datos ha sido borrada exitosamente'});
         })
     
 
     }catch(err){
         //popup diciendo que algo salio mal
-        mainWindow.webContents.send('popup',{type:'ko',title:`Error en la base de datos ${label}`,message:'No se pudo borrar la conexion con la base de datos'});
+        finishLoader();
+        mainWindow.webContents.send('popup',{type:'ko',title:`Error en la base de datos ${label}`,message:`No se pudo borrar la conexion con la base de datos. Razon ${err}`});
     }
 
 }
