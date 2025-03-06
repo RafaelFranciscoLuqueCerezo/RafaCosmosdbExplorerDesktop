@@ -9,7 +9,7 @@ import fs from 'fs';
 let cosmosdbClients : Client[] = [];
 let cosmosdbAgents : Agent[] = []
 
-//Menu.setApplicationMenu(null);
+Menu.setApplicationMenu(null);
 
 function initLoader(){
     mainWindow.webContents.send('loader',true);

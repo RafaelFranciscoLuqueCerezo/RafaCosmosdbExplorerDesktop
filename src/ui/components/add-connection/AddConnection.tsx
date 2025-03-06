@@ -107,7 +107,6 @@ export default function AddConnectionPage({connections}:Props){
             <VisuallyHiddenInput
               type="file"
               onChange={(event:any) => {
-                console.log(event.target.files[0].name);
                 setFileName(event.target.files[0].name);
                 setCertFile(event.target.files[0]);
               }}
