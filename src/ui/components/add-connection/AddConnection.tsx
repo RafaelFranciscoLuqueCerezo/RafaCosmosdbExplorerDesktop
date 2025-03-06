@@ -45,7 +45,7 @@ export default function AddConnectionPage({connections}:Props){
       alert('por favor introduzca un fichero de certificacion para la conexion con la base de datos');
       return;
     }
-    if(connections.length != 0  && connections.find((element:AddConnectionType)=>element.label===config.label)){
+    if(connections != undefined && connections.find((element:AddConnectionType)=>element.label===config.label)){
       alert(`Ya existe ese label (${config.label}), por favor escriba un nombre de label distinto`);
       setLabel("");
       return;
@@ -56,12 +56,12 @@ export default function AddConnectionPage({connections}:Props){
     setLoading(false);
     navigateTo(Page.BLANK);
     //actualizar store
-  },[])
+  },[connections])
 
 
   useEffect(() => {
     setLoading(false);
-    }, []);
+    }, [connections]);
 
 
   return (
