@@ -4,6 +4,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CleanHandsIcon from '@mui/icons-material/CleanHands';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CachedIcon from '@mui/icons-material/Cached';
 import React from "react";
 import './DbConnectionPill.css'
 import { DbContainerPill } from "../db-container/DbContainerPill";
@@ -71,6 +72,14 @@ export default function DbConnectionPill({config}:Props){
                         : undefined
                     }
                     >
+                    <MenuItem onClick={(_)=>{
+                        window.electron.refresh(config);
+                    }}>
+                    <ListItemIcon>
+                        <CachedIcon/>
+                    </ListItemIcon>
+                    <Typography variant="inherit">Refrescar conexion</Typography>
+                    </MenuItem>
                     <MenuItem onClick={(_)=>{
                         window.electron.removeDbConfig(config.label).then((_)=>{
                             removeConnection(config.label)

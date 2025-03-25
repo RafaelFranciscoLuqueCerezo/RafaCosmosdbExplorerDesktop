@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld("electron",{
     saveDbConfig: (data:AddConnectionType) => ipcRenderer.invoke("saveDbConfig",data),
     removeDbConfig: (data:string) => ipcRenderer.invoke("removeDbConfig",data),
     connect: (data:AddConnectionType) => ipcRenderer.invoke("connect",data),
+    refresh: (data:AddConnectionType) => ipcRenderer.invoke("refresh",data),
     getContainers: (data:string) => ipcRenderer.invoke("getContainers",data),
     launchQuery: (data:QueryRequest) => ipcRenderer.invoke("launchQuery",data),
     deleteItems: (data:DeleteItemRequest) => ipcRenderer.invoke("deleteItems",data),
