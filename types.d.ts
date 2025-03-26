@@ -61,6 +61,7 @@ interface Window {
         cleanAllContainers:(data:Operation[])=>Promise<void>,
         importDocument:(data:ImportDocumentRequest)=>Promise<void>,
         connect:(data:AddConnectionType)=>Promise<void>,
+        refresh:(data:AddConnectionType)=>Promise<void>,
         subscribeContainers:(callback:(containers:string[])=>void)=>UnSubFunction,
         subscribeQueryResult:(callback:(result:any[])=>void)=>UnSubFunction,
         subscribeQueryCount:(callback:(result:number)=>void)=>UnSubFunction,

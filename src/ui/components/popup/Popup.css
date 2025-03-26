@@ -1,0 +1,19 @@
+.overflow-popup{
+    max-height: 500px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        position: relative;
+        width: 3px;
+        height: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background:  #fcfcfc;
+        border-radius: 30px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: #3cb190;
+        border-radius: 30px;
+    }
+}

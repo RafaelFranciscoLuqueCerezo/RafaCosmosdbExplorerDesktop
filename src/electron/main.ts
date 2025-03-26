@@ -9,7 +9,7 @@ import fs from 'fs';
 let cosmosdbClients : Client[] = [];
 let cosmosdbAgents : Agent[] = []
 
-//Menu.setApplicationMenu(null);
+Menu.setApplicationMenu(null);
 
 function initLoader(){
     mainWindow.webContents.send('loader',true);
@@ -276,6 +276,7 @@ function saveDbConfig(connectionConfig:AddConnectionType){
         fs.writeFileSync(DATA_FILE,JSON.stringify(appLocalData));
 
     }catch(err){
+        console.log(err);
         const innitalData: DataType = {
             dbConnections:[connectionConfig]
         } 
@@ -288,7 +289,8 @@ function saveDbConfig(connectionConfig:AddConnectionType){
             }
             fs.writeFileSync(path.join(CERT_FOLDER,`${connectionConfig.label}.crt`),buffer);
             finishLoader();
-        } catch (_){
+        } catch (err2){
+            console.log(err2)
             finishLoader();
         }
         
@@ -336,6 +338,46 @@ function closeAllConnections():void{
     });
 }
 
+function refreshConnection(config:AddConnectionType):void{
+    initLoader();
+    //deleting from existing array if needed
+    let matchIndex : number = -1;
+    const size : number = cosmosdbClients.length;
+    for(let i=0;i<size;i++){
+        if(cosmosdbClients[i].label == config.label){
+            matchIndex = i;
+            break;
+        }
+    }
+    if(matchIndex == -1){
+        finishLoader();
+        return;
+    }
+    cosmosdbClients.splice(matchIndex,1);
+    cosmosdbAgents.splice(matchIndex,1);
+    //establishing new connection
+    const agent = new https.Agent( {
+        ca: fs.readFileSync(path.join(CERT_FOLDER,`${config.label}.crt`)),
+        keepAlive:true,
+        rejectUnauthorized:false
+    });
+    const client = new CosmosClient({
+        key: config.secret,
+        endpoint: config.endpoint,
+        connectionPolicy:{
+            enableEndpointDiscovery:false,
+            connectionMode: ConnectionMode.Gateway,
+            requestTimeout: 50000,
+        
+        },
+        agent
+    })
+    cosmosdbClients.push({label:config.label,dbName:config.dbName,client})
+    cosmosdbAgents.push(agent);
+    mainWindow.webContents.send('popup',{type:'ok',title:`Conexion refrescada con ${config.label}`,message:'La conexion con la base de datos ha sido refrescada correctamente'});
+    finishLoader();
+}
+
 
 
 
@@ -368,6 +410,7 @@ app.whenReady().then(()=>{
     ipcMain.handle("removeDbConfig",(event:any,payload:string)=>{removeDbConfig(payload)})
     ipcMain.handle("readDbConnections", ()=>readDbConnections())
     ipcMain.handle("connect",(event:any,payload:AddConnectionType)=>{connect(payload)})
+    ipcMain.handle("refresh",(event:any,payload:AddConnectionType)=>{refreshConnection(payload)})
     ipcMain.handle("getContainers",(event:any,payload:string)=>{getContainers(payload)})
     ipcMain.handle("launchQuery",(event:any,payload:QueryRequest)=>{launchQuery(payload.op,payload.sentence)})
     ipcMain.handle("deleteItems",(event:any,payload:DeleteItemRequest)=>{deleteItems(payload.op,payload.ids)})
